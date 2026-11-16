@@ -1,0 +1,20 @@
+# Dados locais: banco, sessões, senhas e chave da API admin — NUNCA subir
+data/
+
+# Configuração com segredos (TikTok app secret, senha do CEO). Use config.example.json como modelo.
+config.json
+.env
+.env.*
+
+# Configuração local do preview do Claude Code
+.claude/
+
+# Arquivo original do zip (só referência)
+bluvia-gateway.original.html
+
+# Sistema / editores
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp

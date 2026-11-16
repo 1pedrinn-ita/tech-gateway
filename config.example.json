@@ -1,0 +1,9 @@
+{
+  "admin": { "email": "ceo@bluvia.local", "password": "troque-esta-senha" },
+  "public_url": "http://localhost:3000",
+  "tiktok": {
+    "app_id": "SEU_APP_ID",
+    "secret": "SEU_APP_SECRET",
+    "redirect_uri": "http://localhost:3000/api/tiktok/callback"
+  }
+}

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-th="blue"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Norevia — Painel</title>
+<link rel="icon" href="assets/norevia-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<style>
+:root{--bg:#0A1430;--sf:#111E42;--s2:#1A2A54;--bd:#273A68;--tx:#F3EDE1;--mu:#92A0C4;--pr:#FF6B5B;--ac:#6FA8FF;--ok:#34D39A;--wa:#F5B13C;--er:#E5484D;--gl:rgba(255,107,91,.26);--sb:#070E26;--sb2:#1A2A54;--sbd:#273A68;color-scheme:dark}
+:root[data-th="light"]{--bg:#F4EDE0;--sf:#FFFDF8;--s2:#EFE6D6;--bd:#E2D8C5;--tx:#13203C;--mu:#6A7690;--pr:#F0563F;--ac:#2E6AC7;--ok:#0E9F6E;--wa:#B4791A;--er:#CE3A40;--gl:rgba(240,86,63,.15);--sb:#0A1430;--sb2:#1A2A54;--sbd:#273A68;color-scheme:light}
+:root[data-th="ocean"]{--bg:#06191C;--sf:#0B2A2F;--s2:#10393F;--bd:#17525A;--tx:#E8FBFA;--mu:#8CC4C4;--pr:#0D9488;--ac:#2DD4BF;--gl:rgba(13,148,136,.32);--sb:#041012;--sb2:#0B2A2F;--sbd:#17525A}
+:root[data-th="violet"]{--bg:#120B24;--sf:#1A1133;--s2:#251A47;--bd:#34265F;--tx:#F3EEFF;--mu:#A99CCB;--pr:#7C3AED;--ac:#C084FC;--gl:rgba(124,58,237,.32);--sb:#0C0719;--sb2:#251A47;--sbd:#34265F}
+:root[data-th="sunset"]{--bg:#170D09;--sf:#22140E;--s2:#311E16;--bd:#4A2E22;--tx:#FFF4EE;--mu:#C9A595;--pr:#EA580C;--ac:#FB923C;--gl:rgba(234,88,12,.30);--sb:#0F0805;--sb2:#311E16;--sbd:#4A2E22}
+:root[data-th="emerald"]{--bg:#07150F;--sf:#0C2018;--s2:#12301F;--bd:#1B4430;--tx:#ECFDF5;--mu:#8FBFA8;--pr:#059669;--ac:#34D399;--gl:rgba(5,150,105,.30);--sb:#040D09;--sb2:#12301F;--sbd:#1B4430}
+:root.thx *{transition:background-color .45s ease,border-color .45s ease,color .45s ease,fill .45s ease!important}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;min-height:100vh;color:var(--tx);font:400 14px/1.5 "Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:radial-gradient(900px 520px at 85% -8%,var(--gl),transparent 62%) fixed,var(--bg)}
+strong,code,pre,.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+button{font:inherit;color:inherit}a{color:var(--ac)}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh;transition:grid-template-columns .25s ease}
+.app.mini{grid-template-columns:72px minmax(0,1fr)}
+aside{--sf:var(--sb);--s2:var(--sb2);--bd:var(--sbd);--tx:#F1F5F9;--mu:#94A3B8;color:var(--tx);background:var(--sf);border-right:1px solid var(--bd);position:sticky;top:0;align-self:start;height:100vh;overflow:auto;overflow-x:hidden;padding:18px 12px;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;align-items:center;padding:4px 8px 8px}.brand .lock{display:flex;align-items:center;gap:9px}.brand b{font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:700;letter-spacing:-.025em;color:#F3EDE1}.lf{display:flex}.lm{display:none}
+.role{margin:0 8px 8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ac);font-weight:600}
+nav{flex:1}.grp{font-size:12px;color:var(--mu);padding:14px 10px 4px}
+nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:var(--mu);text-decoration:none;font-weight:500}
+nav a:hover{background:var(--s2);color:var(--tx)}nav a.on{background:var(--pr);color:#fff;box-shadow:0 6px 18px var(--gl)}nav a svg{flex:none}
+#tg{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;margin-bottom:6px;border:0;border-radius:8px;background:none;color:var(--mu);font-weight:500;cursor:pointer}#tg:hover{background:var(--s2);color:var(--tx)}
+.usr{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--bd);border-radius:12px;font-size:13px}
+.usr i{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--ac));color:#fff;display:grid;place-items:center;font-style:normal;font-weight:600;flex:none}.usr small{color:var(--mu)}.usr div{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.usr button{margin-left:auto;background:none;border:0;color:var(--mu);cursor:pointer;padding:4px;border-radius:6px}.usr button:hover{color:var(--er);background:var(--s2)}
+.mini .brand{justify-content:center}.mini .lf,.mini .role{display:none}.mini .lm{display:block}
+.mini .grp{font-size:0;height:1px;background:var(--bd);margin:10px 8px;padding:0}
+.mini nav a span,.mini #tg span,.mini .usr div,.mini .usr button{display:none}.mini nav a,.mini #tg{justify-content:center}.mini .usr{justify-content:center;padding:8px 0;border:0}.mini #tg svg{transform:rotate(180deg)}
+main{padding:18px 28px 48px;min-width:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sel,.fm input,.fm select,.in{background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:9px 11px;font:inherit;min-width:0;outline:none;transition:border-color .2s,box-shadow .2s}
+.sel:focus,.fm input:focus,.fm select:focus,.in:focus{border-color:var(--pr);box-shadow:0 0 0 3px var(--gl)}
+.live{display:flex;align-items:center;gap:7px;border:1px solid var(--bd);background:var(--sf);color:var(--mu);border-radius:10px;padding:7px 11px;font-size:13px;cursor:pointer}
+.live:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mu)}.live.on{color:var(--tx)}.live.on:before{background:var(--ok);animation:pulse 1.8s infinite}
+.chiph{font-size:13px;color:var(--mu);display:flex;align-items:center;gap:8px}
+.icb{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--bd);background:var(--sf);border-radius:10px;cursor:pointer;color:var(--tx)}
+.thw{position:relative}
+.thp{position:absolute;right:0;top:44px;z-index:30;background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:8px;width:220px;box-shadow:0 18px 40px rgba(0,0,0,.35);transform-origin:top right;animation:pop .25s cubic-bezier(.2,1.3,.4,1)}
+.thp b{display:block;font-size:12px;color:var(--mu);padding:4px 8px 6px;font-weight:500}
+.tho{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:8px;border-radius:9px;cursor:pointer;text-align:left}.tho:hover,.tho.on{background:var(--s2)}.tho.on{font-weight:600}
+.tho i{width:26px;height:26px;border-radius:8px;flex:none;background:linear-gradient(135deg,var(--a) 0 50%,var(--b) 50%);border:1px solid rgba(255,255,255,.15)}.tho .ck{margin-left:auto;color:var(--ok);font-style:normal}
+.imp{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(90deg,color-mix(in srgb,var(--wa) 22%,var(--sf)),var(--sf));border:1px solid color-mix(in srgb,var(--wa) 50%,var(--bd));border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:13.5px}
+.imp .btn{margin-left:auto}
+h1{font-size:25px;margin:0;font-weight:600;letter-spacing:-.01em}.sub{color:var(--mu);margin:2px 0 18px}
+h3{font-size:15px;margin:22px 0 10px;font-weight:600}
+.ph1{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:16px}
+.card{position:relative;isolation:isolate;background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:16px}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(240px circle at var(--mx,50%) var(--my,0px),var(--gl),transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none;z-index:-1}.card:hover::before{opacity:1}
+.kp .card{margin:0}.card small{display:block;color:var(--mu)}
+.k strong{display:block;font-size:21px;font-weight:600;margin:3px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k em{font-style:normal;font-size:12px;color:var(--mu)}.k em.ok,.ok-t{color:var(--ok)}.k em.er,.er-t{color:var(--er)}.wa-t{color:var(--wa)}
+.k.hl{background:linear-gradient(135deg,var(--pr),color-mix(in srgb,var(--pr) 55%,var(--ac)));border-color:transparent;color:#fff}.k.hl small,.k.hl em{color:rgba(255,255,255,.85)}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.ch small{display:inline}
+.g2{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px}
+.g2e{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+.g2h{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.bx{display:flex;align-items:stretch;gap:4px;height:180px;margin-top:16px}
+.bc{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;position:relative}
+.bt{flex:1 1 0;min-height:0;width:100%;display:flex;align-items:flex-end}
+.bc i{display:block;width:100%;background:linear-gradient(180deg,var(--ac),var(--pr));border-radius:5px 5px 0 0;min-height:2px;transform-origin:bottom;transition:filter .2s,transform .2s}
+.bx.okb .bc i{background:linear-gradient(180deg,var(--ok),color-mix(in srgb,var(--ok) 45%,var(--pr)))}
+.bc span{font-size:9.5px;color:var(--mu);line-height:1.9;white-space:nowrap}
+.bc:hover i{filter:brightness(1.35) saturate(1.2);transform:scaleX(1.08)}
+.bc[data-t]:hover::after{content:attr(data-t);position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);font-size:11px;padding:4px 8px;border-radius:7px;white-space:nowrap;z-index:5;pointer-events:none;animation:fi .15s}
+.sp{margin-top:14px}.sp .r{display:flex;justify-content:space-between;gap:8px;font-size:13px;align-items:center}.sp .r span:first-child{display:flex;align-items:center;gap:8px}
+.sp u{display:block;height:8px;border-radius:4px;background:var(--s2);margin:6px 0 12px;text-decoration:none;overflow:hidden}.sp u s{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--pr),var(--ac));transform-origin:left}
+.tgl{display:inline-flex;background:var(--s2);border-radius:9px;padding:3px;flex-wrap:wrap}
+.tgl button{background:none;border:0;color:var(--mu);font-size:12.5px;cursor:pointer;padding:5px 11px;border-radius:7px}.tgl .on{background:var(--sf);color:var(--tx);font-weight:600}
+.tb{padding:0;overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:520px}
+th{text-align:left;font-weight:500;color:var(--mu);font-size:12.5px;padding:12px 14px;border-bottom:1px solid var(--bd);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--bd);transition:background .15s;white-space:nowrap}tr:last-child td{border:0}
+tbody tr:hover td{background:var(--s2)}td.emp{color:var(--mu);text-align:center;padding:22px;white-space:normal}td.wrap{white-space:normal}
+.b{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:500;background:var(--s2);white-space:nowrap}.b.ok{color:var(--ok)}.b.wa{color:var(--wa)}.b.er{color:var(--er)}.b.ac{color:var(--ac)}
+.src{display:inline-flex;align-items:center;gap:7px}
+code{background:var(--s2);border-radius:6px;padding:2px 6px;font-size:12.5px}
+pre{background:#060B1C;color:#D6E2FF;border:1px solid var(--bd);border-radius:11px;padding:14px;overflow:auto;font-size:12.5px;line-height:1.6;margin:8px 0 14px;position:relative}
+:root[data-th="light"] pre{background:#0B1430}
+pre .cp{position:absolute;top:8px;right:8px;font:500 11px "Space Grotesk";background:#1B2A55;color:#C7D6FF;border:0;border-radius:6px;padding:3px 8px;cursor:pointer;opacity:.8}pre .cp:hover{opacity:1}
+.log{display:block;background:var(--s2);border-radius:9px;padding:10px 12px;margin:8px 0;max-height:200px;overflow:auto;line-height:1.75;font-size:12px}.log div{display:flex;gap:8px}.log .t{color:var(--mu);flex:none}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--pr);color:#fff;border:0;border-radius:9px;padding:9px 15px;font-weight:500;cursor:pointer;margin:0 8px 0 0;text-decoration:none;white-space:nowrap}
+.btn.o{background:var(--sf);color:var(--tx);border:1px solid var(--bd)}.btn.er{background:none;color:var(--er);border:1px solid var(--bd)}.btn.ok{background:var(--ok);color:#04261A}
+.btn.big{width:100%;padding:13px;font-size:15px;margin:12px 0 0}.btn.sm{padding:5px 10px;font-size:12.5px;border-radius:8px}
+.btn.tt{background:#000;color:#fff;border:1px solid #333}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);transition:left .55s ease;pointer-events:none}.btn:hover::after{left:130%}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.fm{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}.fm>input{flex:1 1 160px}
+.err{color:var(--er);display:block;min-height:1.2em;font-size:12.5px;margin-top:6px}
+.hint{display:block;font-size:12.5px;color:var(--mu);min-height:1.2em}.hint.ok{color:var(--ok)}.hint.er{color:var(--er)}
+.lb{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+.note{background:var(--s2);border:1px dashed var(--bd);border-radius:10px;padding:10px 12px;color:var(--mu);font-size:13px;margin:10px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--s2);border-radius:30px;padding:4px 12px 4px 4px;font-size:12.5px;cursor:pointer}
+.pchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);background:var(--s2);border-radius:20px;padding:3px 6px 3px 10px;font:500 12px "JetBrains Mono",monospace}.pchip button{border:0;background:none;color:var(--mu);cursor:pointer;padding:0 4px;font-size:14px;line-height:1}.pchip button:hover{color:var(--er)}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rg{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid var(--bd);background:var(--s2);border-radius:12px;padding:12px 14px;cursor:pointer}.rg svg{margin-bottom:6px;color:var(--ac)}.rg small{color:var(--mu)}
+.rg.on,.bank.on{border-color:var(--pr);box-shadow:0 0 0 3px var(--gl);background:color-mix(in srgb,var(--pr) 12%,var(--s2))}
+.banks{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.bank{display:flex;align-items:center;gap:10px;border:1px solid var(--bd);background:var(--s2);border-radius:12px;padding:9px 10px;cursor:pointer;font-weight:500;text-align:left}
+.bl{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:700 11px/1 "Space Grotesk",sans-serif;flex:none}
+.sum{background:var(--s2);border-radius:12px;padding:6px 14px;margin-top:14px}
+.sum div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--bd);font-size:13.5px}.sum div:last-child{border:0}
+.sum span{color:var(--mu)}.sum b{font-family:"JetBrains Mono",monospace;font-weight:600;text-align:right}.sum .tot b{font-size:15px}.sum b.ok{color:var(--ok)}.sum b.er{color:var(--er)}
+.ph{display:flex;align-items:center;gap:12px;margin-bottom:10px}.ph b{font-size:16px;display:block}.ph small{color:var(--mu)}.ph .b{margin-left:auto}
+.pl{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.ttc{border-color:color-mix(in srgb,#FE2C55 40%,var(--bd))}
+.ttc::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(120deg,#25F4EE,transparent 35%,transparent 65%,#FE2C55);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.7}
+.opt2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.opt{border:1px solid var(--bd);border-radius:12px;padding:14px;background:var(--s2)}.opt p{color:var(--mu);margin:4px 0 10px;font-size:13px}
+.mk{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:12px 0}
+.mk div{background:var(--s2);border-radius:10px;padding:10px 12px}.mk small{font-size:12px}.mk b{font-family:"JetBrains Mono",monospace;font-size:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.sw{position:relative;width:38px;height:22px;border-radius:20px;background:var(--bd);border:0;cursor:pointer;transition:background .2s;flex:none;padding:0}
+.sw:after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}.sw.on{background:var(--ok)}.sw.on:after{transform:translateX(16px)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px}
+.dv{font:600 12.5px "JetBrains Mono",monospace;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;background:var(--s2)}.dv.up{color:var(--ok)}.dv.dn{color:var(--er)}.dv.eq{color:var(--mu)}
+.spk{display:block}
+.edit td{background:var(--s2)!important;white-space:normal}
+.qr{background:#fff;border-radius:12px;padding:10px;display:inline-block;line-height:0}.qr svg{display:block;width:180px;height:180px}
+.brc{font:12px "JetBrains Mono",monospace;word-break:break-all;background:var(--s2);border-radius:9px;padding:10px;margin:8px 0}
+.doc{display:grid;grid-template-columns:200px minmax(0,1fr);gap:22px;align-items:start}
+.toc{position:sticky;top:16px;display:flex;flex-direction:column;gap:2px;font-size:13px}.toc a{color:var(--mu);text-decoration:none;padding:5px 10px;border-radius:7px}.toc a:hover{background:var(--s2);color:var(--tx)}
+.doc h2{font-size:18px;margin:26px 0 6px;scroll-margin-top:16px}.doc h2:first-child{margin-top:0}.doc p{color:var(--mu);margin:6px 0}
+.ep{display:inline-flex;gap:8px;align-items:center;font:600 13px "JetBrains Mono",monospace;background:var(--s2);border-radius:8px;padding:6px 10px;margin:6px 0}.ep i{font-style:normal;padding:1px 7px;border-radius:5px;color:#fff;font-size:11.5px}.ep .post{background:#16A34A}.ep .get{background:#2563EB}
+/* seletor de modo fixo (CEO | Gerente | Seller) */
+.modes{position:fixed;right:18px;bottom:18px;z-index:65;display:flex;gap:4px;padding:5px;background:var(--sf);border:1px solid var(--bd);border-radius:16px;box-shadow:0 16px 44px rgba(0,0,0,.45);animation:rise .4s cubic-bezier(.2,.8,.2,1)}
+.modes button{display:flex;align-items:center;gap:7px;border:0;background:none;color:var(--mu);font-weight:600;font-size:14px;padding:10px 16px;border-radius:12px;cursor:pointer;transition:background-color .2s,color .2s,transform .2s,box-shadow .2s}
+.modes button.on{background:var(--pr);color:#fff;box-shadow:0 6px 18px var(--gl)}.modes button:not(.on):hover{color:var(--tx);background:var(--s2);transform:translateY(-2px)}
+body.hasModes #toasts{bottom:86px}
+.devcard{border:1px solid var(--bd);background:var(--sf);border-radius:14px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--mu)}
+.devcard.alta{border-left-color:var(--er)}.devcard.media{border-left-color:var(--wa)}
+.devh{display:flex;align-items:center;gap:10px}.devh b{font-size:15px}.devimp{margin-left:auto;font:600 13px "JetBrains Mono",monospace;color:var(--er)}
+.devmsg{margin:8px 0 0;font-size:13.5px}
+.feebtn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);border-radius:8px;padding:5px 10px;font:600 12.5px "JetBrains Mono",monospace;cursor:pointer;transition:border-color .2s,transform .2s}.feebtn:hover{border-color:var(--pr);transform:translateY(-1px)}
+.feeform{padding:4px 2px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:700;margin-bottom:4px}
+.big{font:700 36px/1.15 "JetBrains Mono",monospace;margin:6px 0 14px}
+.hlc{background:radial-gradient(500px 200px at 10% 0%,color-mix(in srgb,var(--pr) 22%,transparent),transparent 70%),var(--sf);border-color:color-mix(in srgb,var(--pr) 45%,var(--bd))}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--bd);padding-top:14px}.split small{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.alertb{display:flex;align-items:center;gap:12px;border:1px solid color-mix(in srgb,var(--wa) 55%,var(--bd));background:color-mix(in srgb,var(--wa) 10%,var(--sf));color:var(--tx);border-radius:12px;padding:12px 16px;margin-bottom:16px;animation:rise .4s both}
+.alertb svg{color:var(--wa);flex:none}.alertb a{margin-left:auto;color:var(--wa);font-weight:600;text-decoration:none;white-space:nowrap}
+.alertb.ok{border-color:color-mix(in srgb,var(--ok) 50%,var(--bd));background:color-mix(in srgb,var(--ok) 9%,var(--sf))}.alertb.ok svg{color:var(--ok)}
+.nrow{display:flex;align-items:center;gap:14px;border:1px solid var(--bd);background:var(--s2);border-radius:12px;padding:12px 16px;margin-bottom:8px;transition:transform .2s,border-color .2s}
+.nrow:hover{transform:translateX(4px);border-color:var(--pr)}.nrow.me{border-color:var(--pr);background:color-mix(in srgb,var(--pr) 14%,var(--s2))}.nrow.ind{margin-left:38px;border-style:dashed}
+.nrow .av{width:34px;height:34px;border-radius:50%;background:color-mix(in srgb,var(--pr) 30%,var(--sf));color:var(--ac);display:grid;place-items:center;font-weight:700;flex:none}.nrow.me .av{background:var(--pr);color:#fff}
+.nrow .nm{flex:1;min-width:0}.nrow .nm small{color:var(--mu)}.nrow .mt{text-align:right;min-width:120px;line-height:1.3}.nrow .mt small{display:block;color:var(--mu);font-size:11.5px}.nrow .mt b{font-family:"JetBrains Mono",monospace}
+.ac-t{color:var(--ac)!important}
+.medal{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--s2);font:700 12px "JetBrains Mono",monospace;color:var(--mu)}.medal.m0{background:linear-gradient(135deg,#FCD34D,#B45309);color:#1A1000}.medal.m1{background:linear-gradient(135deg,#E5E7EB,#6B7280);color:#111}.medal.m2{background:linear-gradient(135deg,#FDBA74,#9A3412);color:#1A0A00}
+.area .ln{stroke-dasharray:3000;stroke-dashoffset:0}.enter .area .ln{animation:dash 1.6s ease both;--len:3000}.area .dot{opacity:0;transition:opacity .2s}.area:hover .dot{opacity:1}
+@media(max-width:860px){.nrow{flex-wrap:wrap}.nrow .mt{text-align:left;min-width:0}.modes button{padding:9px 11px}}
+/* saldo + seletor de subconta no topo */
+#hr{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.hbal{display:flex;flex-direction:column;align-items:flex-end;border:1px solid color-mix(in srgb,var(--pr) 55%,var(--bd));background:color-mix(in srgb,var(--pr) 10%,var(--sf));border-radius:11px;padding:4px 12px;line-height:1.2}
+.hbal small{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}.hbal b{font:600 15px "JetBrains Mono",monospace;color:var(--ac)}
+.acct{display:flex;align-items:center;gap:10px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:5px 10px 5px 5px;cursor:pointer;text-align:left;max-width:280px}
+.acct i{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--ac));color:#fff;display:grid;place-items:center;font-style:normal;font-weight:700;flex:none}
+.acct span{min-width:0}.acct b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.acct small{display:block;font-size:11.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acct:hover{border-color:var(--pr);transform:translateY(-2px);box-shadow:0 8px 20px var(--gl)}.acct svg{flex:none;color:var(--mu);transition:transform .2s}.acct:hover svg{transform:translateY(2px)}
+.lbx{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);margin-bottom:8px}
+.acl{display:flex;flex-direction:column;gap:8px}
+.acr{display:flex;align-items:center;gap:12px;border:1px solid var(--bd);background:var(--s2);border-radius:12px;padding:10px 12px;transition:transform .2s,border-color .2s}
+.acr:hover{transform:translateX(3px);border-color:var(--pr)}.acr.on{border-color:var(--pr);box-shadow:0 0 0 3px var(--gl);background:color-mix(in srgb,var(--pr) 14%,var(--s2))}
+.acr i{width:32px;height:32px;border-radius:50%;background:color-mix(in srgb,var(--ac) 25%,var(--sf));color:var(--ac);display:grid;place-items:center;font-style:normal;font-weight:700;flex:none}
+.acr div{flex:1;min-width:0}.acr b{display:block}.acr small{color:var(--mu);font-size:12px}
+.pp.l .ch h2{font-size:20px}
+@media(max-width:860px){.acct span{display:none}.hbal small{display:none}}
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:16px}
+.lcard{width:min(400px,100%);background:var(--sf);border:1px solid var(--bd);border-radius:20px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.35);animation:rise .5s cubic-bezier(.2,.8,.2,1)}
+.lcard img{height:34px;margin-bottom:18px}.lcard .in{width:100%;margin-bottom:10px}
+/* modal / popup / toast */
+.ov{position:fixed;inset:0;background:rgba(3,7,20,.66);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:60;animation:fi .25s;overflow:hidden;padding:16px}.ov.out{animation:fo .25s forwards}
+.pp{position:relative;background:var(--sf);border:1px solid var(--bd);border-radius:22px;padding:28px;text-align:center;width:min(400px,100%);animation:pop .5s cubic-bezier(.2,1.4,.4,1);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.pp.l{text-align:left;width:min(520px,100%)}
+.pp h2{margin:10px 0 2px;font-size:22px}.pp p{color:var(--mu);margin:2px 0 14px}
+.pv{font:600 30px "JetBrains Mono",monospace;color:var(--ok);margin:6px 0 2px;animation:rise .5s .55s both}
+.pd{margin:0 0 18px;text-align:left;background:var(--s2);border-radius:12px;padding:4px 14px}.pd div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed var(--bd);font-size:13px}.pd div:last-child{border:0}.pd dt{color:var(--mu)}.pd dd{margin:0;font-family:"JetBrains Mono",monospace;text-align:right}
+.pp svg.chk{filter:drop-shadow(0 0 16px var(--ok))}
+.pc{stroke-dasharray:151;stroke-dashoffset:151;animation:dr .6s .15s forwards}.pk{stroke-dasharray:40;stroke-dashoffset:40;animation:dr .4s .65s forwards}
+.cf{position:absolute;left:50%;top:70px;width:0;height:0;pointer-events:none}
+.cf i{position:absolute;width:8px;height:13px;border-radius:2px;background:var(--c);opacity:0;animation:cf var(--t) var(--dl) cubic-bezier(.15,.6,.35,1) forwards}
+#toasts{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:70;max-width:calc(100vw - 36px)}
+.toast{display:flex;align-items:center;gap:10px;background:var(--sf);border:1px solid var(--bd);border-left:3px solid var(--ok);border-radius:12px;padding:10px 14px;box-shadow:0 12px 30px rgba(0,0,0,.35);animation:tin .45s cubic-bezier(.2,1.3,.4,1);font-size:13px;max-width:400px}
+.toast.er{border-left-color:var(--er)}.toast.wa{border-left-color:var(--wa)}.toast.out{animation:tout .35s forwards}
+.toast .ti{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok);flex:none}
+.shake{animation:shake .4s}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 70%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes fi{from{opacity:0}}@keyframes fo{to{opacity:0}}@keyframes pop{from{transform:scale(.6);opacity:0}}@keyframes rise{from{transform:translateY(14px);opacity:0}}
+@keyframes grow{from{transform:scaleY(0)}}@keyframes growx{from{transform:scaleX(0)}}@keyframes dr{to{stroke-dashoffset:0}}@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes tin{from{transform:translateX(120%);opacity:0}}@keyframes tout{to{transform:translateX(120%);opacity:0}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes cf{0%{opacity:1;transform:translate(0,0) rotate(0)}45%{opacity:1;transform:translate(calc(var(--x)*.7),var(--y)) rotate(calc(var(--r)*.5))}100%{opacity:0;transform:translate(var(--x),calc(var(--y) + 320px)) rotate(var(--r))}}
+@keyframes bump{50%{transform:scale(1.08)}}
+@keyframes dash{from{stroke-dashoffset:var(--len)}}
+@media (prefers-reduced-motion:no-preference){
+.card,nav a,.btn,.rg,.bank,.chip,.tho,.icb,.live,.opt,.mk div,.pchip{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,border-color .22s ease,background-color .22s ease,filter .22s}
+.card:not(.tb):not(.static):hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--pr) 70%,var(--bd));box-shadow:0 14px 34px var(--gl)}
+.card.tb:hover,.card.static:hover{border-color:color-mix(in srgb,var(--pr) 45%,var(--bd))}
+nav a:hover{transform:translateX(4px)}nav a:hover svg{animation:bump .4s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px var(--gl);filter:brightness(1.08)}.btn:active{transform:scale(.96)}
+.rg:hover,.bank:hover,.opt:hover{transform:translateY(-3px);border-color:var(--pr)}.bank:hover .bl{animation:bump .4s}
+.chip:hover,.pchip:hover{transform:translateY(-2px);border-color:var(--pr)}.mk div:hover{transform:scale(1.04)}
+.icb:hover,.live:hover{transform:translateY(-2px);border-color:var(--pr)}.icb:hover svg{transform:rotate(25deg);transition:transform .3s}
+.tho:hover i{transform:scale(1.12) rotate(-6deg);transition:transform .25s}
+tbody tr{transition:transform .15s}tbody tr:hover{transform:translateX(3px)}
+.enter>*{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.enter>*:nth-child(2){animation-delay:.04s}.enter>*:nth-child(3){animation-delay:.08s}.enter>*:nth-child(4){animation-delay:.12s}.enter>*:nth-child(5){animation-delay:.16s}.enter>*:nth-child(n+6){animation-delay:.2s}
+.enter .kp .card{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}.enter .kp .card:nth-child(2){animation-delay:.05s}.enter .kp .card:nth-child(3){animation-delay:.1s}.enter .kp .card:nth-child(4){animation-delay:.15s}.enter .kp .card:nth-child(n+5){animation-delay:.2s}
+.enter .bc i{animation:grow .8s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0s)}
+.enter .sp u s{animation:growx .9s cubic-bezier(.2,.8,.2,1) both}
+.enter .spk polyline{stroke-dasharray:var(--len);animation:dash 1.2s ease both}
+}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(max-width:1100px){.pl,.opt2{grid-template-columns:1fr}.doc{grid-template-columns:1fr}.toc{position:static;flex-direction:row;flex-wrap:wrap}}
+@media(max-width:960px){.g2e,.g2h{grid-template-columns:1fr}}
+@media(max-width:860px){.app,.app.mini{grid-template-columns:64px minmax(0,1fr)}.brand .lf,.role{display:none}.brand .lm{display:block;height:26px}.brand{justify-content:center}nav a span,#tg,.usr div,.usr button{display:none}nav a{justify-content:center}.grp{font-size:0;height:1px;background:var(--bd);margin:10px 8px;padding:0}.usr{justify-content:center;padding:8px 0;border:0}aside{padding:14px 8px}main{padding:16px}.g2{grid-template-columns:1fr}.seg2{grid-template-columns:1fr}}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ngrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#F0563F"/></linearGradient></defs></svg>
+<div id="login" class="login" hidden></div>
+<div class="app" id="app" hidden>
+<aside>
+  <div class="brand"><span class="lock lf"><svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="url(#ngrad)"/><path d="M13 34C19.5 34 21 20.5 33 15.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="13" cy="34" r="3.7" fill="#fff"/><path d="M27 15.5L34 14.6L33.4 21.6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Norevia</b></span><span class="lock lm"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><rect width="48" height="48" rx="13" fill="url(#ngrad)"/><path d="M13 34C19.5 34 21 20.5 33 15.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="13" cy="34" r="3.7" fill="#fff"/><path d="M27 15.5L34 14.6L33.4 21.6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <div class="role" id="role"></div>
+  <nav id="nav"></nav>
+  <button id="tg" type="button" title="Recolher menu" aria-label="Recolher menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg><span>Recolher menu</span></button>
+  <div class="usr" id="usr"></div>
+</aside>
+<main>
+  <div id="impb"></div>
+  <header><div id="hl"></div>
+    <div class="tools"><span id="hr"></span>
+      <div class="thw"><button id="thb" class="icb" aria-label="Escolher tema" title="Temas" onclick="thToggle(event)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 110-20c5.5 0 10 4 10 9a5 5 0 01-5 5h-2a2 2 0 00-1.5 3.3A1.6 1.6 0 0112 22z"/><circle cx="7.5" cy="11" r="1.3"/><circle cx="12" cy="7" r="1.3"/><circle cx="16.5" cy="11" r="1.3"/></svg></button><div id="thp" class="thp" hidden></div></div>
+    </div></header>
+  <section id="v"></section>
+</main>
+</div>
+<div id="modes" class="modes" hidden role="tablist" aria-label="Modo do painel"></div>
+<div id="toasts" aria-live="polite"></div>
+<script>
+'use strict';
+/* ================= utilidades ================= */
+const DAY=864e5,USD_BRL=5.40,SPREAD=.008,CUR2BRL={BRL:1,USD:5.40,EUR:5.87,GBP:6.84};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const RS=n=>Math.round((n+Number.EPSILON)*100)/100;
+const brl=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0);
+const nf=n=>new Intl.NumberFormat('pt-BR').format(n);
+const pct=(v,d=1)=>(v*100).toFixed(d).replace('.',',')+'%';
+const xr=v=>v.toFixed(2).replace('.',',')+'x';
+const hs=s=>[...String(s)].reduce((t,c)=>(t*31+c.charCodeAt(0))>>>0,7);
+const roasOf=n=>1.6+(hs(n)%28)/10;
+const mask=k=>{k=String(k);return k.length>6?k.slice(0,3)+'•••'+k.slice(-3):k};
+const ago=t=>{const m=(Date.now()-t)/6e4;return m<1?'agora':m<60?(m|0)+' min':m<1440?((m/60)|0)+' h':((m/1440)|0)+' d'};
+const dt=t=>new Date(t).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+const slug=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const net=x=>x.a-x.f;
+const I={ceo:"M3 3v18h18M7 15l4-4 3 3 6-6",sel:"M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",tx:"M4 6h16M4 12h16M4 18h10",w:"M3 7h18v13H3zM3 7l3-4h12l3 4M16 14h2",acq:"M12 2l9 5v10l-9 5-9-5V7zM12 12l9-5M12 12v10M12 12L3 7",doc:"M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M8 13h8M8 17h6",d:"M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z",sub:"M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM17 14v6M14 17h6",t:"M12 22a10 10 0 100-20 10 10 0 000 20zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13a1 1 0 100-2 1 1 0 000 2",k:"M8 7l-5 5 5 5M16 7l5 5-5 5",pix:"M12 2l10 10-10 10L2 12zM8 12l4-4 4 4-4 4z",glob:"M12 22a10 10 0 100-20 10 10 0 000 20zM2 12h20M12 2c3 3 4 6.5 4 10s-1 7-4 10c-3-3-4-6.5-4-10s1-7 4-10z",out:"M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9",plus:"M12 5v14M5 12h14",pulse:"M3 12h4l2 6 4-12 2 6h5",box:"M12 2l9 5v10l-9 5-9-5V7zM12 12l9-5M12 12v10M12 12L3 7",usr:"M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8",cart:"M3 4h3l2 12h10l2-8H7M9 20h.01M17 20h.01",link:"M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 10a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1",rep:"M17 2l4 4-4 4M3 11V9a3 3 0 013-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 01-3 3H3",plug:"M9 2v6M15 2v6M6 8h12v4a6 6 0 01-12 0zM12 18v4",alert:"M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 001.7 3h16.6A2 2 0 0022 18L13.7 3.9a2 2 0 00-3.4 0z",shield:"M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z",login:"M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"};
+const ico=(p,s=18)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${p}"/></svg>`;
+const TTP='M15.2 5c.3 1.9 1.4 3 3.2 3.2v2.5c-1.2 0-2.2-.4-3.1-1v4.6a4.3 4.3 0 11-4.3-4.3c.2 0 .4 0 .6.1v2.6a1.8 1.8 0 101.3 1.7V5z';
+const LG=(id,s=34)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" aria-hidden="true" style="flex:none">`+({
+ tiktok:`<rect width="24" height="24" rx="6" fill="#000"/><path d="${TTP}" fill="#25F4EE" transform="translate(-.6 -.6)"/><path d="${TTP}" fill="#FE2C55" transform="translate(.6 .6)"/><path d="${TTP}" fill="#fff"/>`,
+ meta:'<rect width="24" height="24" rx="6" fill="#0866FF"/><path d="M7 15.5c-1.8 0-3-1.6-3-3.5s1.2-3.5 3-3.5c3.5 0 6 7 10 7 1.8 0 3-1.6 3-3.5S18.8 8.5 17 8.5c-4 0-6.5 7-10 7z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>',
+ google:'<rect width="24" height="24" rx="6" fill="#fff" stroke="#DADCE0"/><path d="M9.5 5l8 13" stroke="#4285F4" stroke-width="3.4" stroke-linecap="round"/><path d="M14.5 5l-8 13" stroke="#FBBC04" stroke-width="3.4" stroke-linecap="round"/><circle cx="6.5" cy="18" r="2.2" fill="#34A853"/>',
+ kwai:'<rect width="24" height="24" rx="6" fill="#FF7300"/><path d="M7 8h4l2 3 2-3h2l-3 4.5L17 17h-2.5l-1.5-2.4L11.5 17H7z" fill="#fff"/>',
+ organico:'<rect width="24" height="24" rx="6" fill="#16A34A"/><path d="M12 18c0-6 3-9 7-10-1 5-3 9-7 10zM12 18c0-4-2-6-6-7 .5 4 2.5 6 6 7z" fill="#fff"/>'})[id]+'</svg>';
+const SRCN={tiktok:'TikTok',meta:'Meta',google:'Google',kwai:'Kwai',organico:'Orgânico'};
+const srcL=s=>`<span class="src">${LG(s,18)}${SRCN[s]||esc(s)}</span>`;
+const BANKS={br:[['XP','XP','#111111','#F5C400'],['Nubank','nu','#820AD1','#fff'],['NG Cash','NG','#0B0B0B','#00E676'],['Inter','in','#FF7A00','#fff'],['Itaú','itaú','#EC7000','#002D8C']],intl:[['Wise','W','#9FE870','#163300'],['Inter Global','in','#FF7A00','#fff']]};
+const bankOf=n=>[...BANKS.br,...BANKS.intl].find(b=>b[0]==n)||['Pix','px','#32BCAD','#fff'];
+const bl=b=>`<span class="bl" style="background:${b[2]};color:${b[3]}">${b[1]}</span>`;
+const TH=[['blue','Navy','#FF6B5B','#0A1430'],['light','Cream','#F0563F','#F4EDE0'],['ocean','Oceano','#0D9488','#06191C'],['violet','Violeta','#7C3AED','#120B24'],['sunset','Pôr do sol','#EA580C','#170D09'],['emerald','Esmeralda','#059669','#07150F']];
+const P={};try{Object.assign(P,JSON.parse(localStorage.getItem('bv-ui')||'{}'))}catch(e){}
+const psave=()=>{try{localStorage.setItem('bv-ui',JSON.stringify(P))}catch(e){}};
+P.th=P.th||'blue';document.documentElement.dataset.th=P.th;
+
+/* ================= componentes ================= */
+const KF={m:v=>brl(v),i:v=>nf(Math.round(v)),p:v=>pct(v),x:v=>xr(v),s:v=>v};
+const kp=a=>`<div class="kp">${a.map(([l,v,s='',k='m',c='',h=''])=>`<div class="card k ${h}"><small>${l}</small><strong data-k="${k}" data-v="${typeof v=='number'&&k!='s'?v:''}">${KF[k](v)}</strong><em class="${c}">${s}</em></div>`).join('')}</div>`;
+const BD={Pago:'ok',Pendente:'wa',Expirado:'',Ativo:'ok',Bloqueado:'er',Standby:'wa',Inativo:'',Conectado:'ok',Demonstração:'wa','Não conectado':'',Erro:'er','Concluído':'ok',Processando:'ac','Em análise':'wa',Recusado:'er'};
+const bd=t=>`<span class="b ${BD[t]||''}">${t=='Processando'?'<span class="spin" style="width:10px;height:10px"></span>':''}${esc(t)}</span>`;
+const tbl=(h,r,e='Nada por aqui ainda.',cls='')=>`<div class="card tb ${cls}"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${r.length?r.map(x=>typeof x=='string'?x:`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${h.length}" class="emp">${e}</td></tr>`}</tbody></table></div>`;
+const bars=(l,v,f,every=1,cls='')=>{const mx=Math.max(...v,1e-9);return `<div class="bx ${cls}">${v.map((x,i)=>`<div class="bc" data-t="${esc(l[i])}: ${esc(f(x,i))}"><div class="bt"><i style="height:${Math.max(x/mx*100,1.2)}%;--d:${i*18}ms"></i></div><span>${i%every?'&nbsp;':l[i]}</span></div>`).join('')}</div>`};
+const spark=(v,c='var(--ac)')=>{const w=90,h=26,mx=Math.max(...v,1e-9),pts=v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(' ');return `<svg class="spk" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${c}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" style="--len:300;stroke-dashoffset:0"/></svg>`};
+const dvB=(c,p)=>{if(!p&&!c)return'<span class="dv eq">—</span>';if(!p)return'<span class="dv up">novo</span>';const d=c/p-1;return `<span class="dv ${d>=.15?'up':d<=-.15?'dn':'eq'}">${d>=0?'▲':'▼'} ${pct(Math.abs(d),0)}</span>`};
+const head=(t,s,act='')=>`<div class="ph1"><div><h1>${t}</h1><p class="sub">${s}</p></div><div class="row" style="margin:0">${act}</div></div>`;
+const MR=()=>{const n=Date.now(),m=new Date();m.setDate(1);m.setHours(0,0,0,0);const p=new Date(m);p.setMonth(p.getMonth()-1);const el=n-m;const dim=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();return{n,m0:+m,p0:+p,pe:+p+el,el,dim,day:new Date().getDate(),mn:m.toLocaleDateString('pt-BR',{month:'long'}),pn:p.toLocaleDateString('pt-BR',{month:'long'})}};
+const paidIn=(a,f,t)=>a.filter(x=>x.st=='Pago'&&x.pt>=f&&x.pt<t);
+const genIn=(a,f,t)=>a.filter(x=>x.ts>=f&&x.ts<t&&(x.st=='Pago'||x.st=='Expirado'));
+const sumA=a=>a.reduce((t,x)=>t+x.a,0),sumF=a=>a.reduce((t,x)=>t+x.f,0),sumC=a=>a.reduce((t,x)=>t+x.a*x.c,0),sumN=a=>a.reduce((t,x)=>t+x.a-x.f,0);
+const conv=a=>{const g=a.length;return g?a.filter(x=>x.st=='Pago').length/g:0};
+function daily(a,from,days,fn){const o=Array(days).fill(0);a.forEach(x=>{if(x.st!='Pago')return;const i=Math.floor((x.pt-from)/DAY);if(i>=0&&i<days)o[i]+=fn(x)});return o}
+const dayStart=t=>{const d=new Date(t);d.setHours(0,0,0,0);return +d};
+
+/* ================= estado + servidor ================= */
+let ST=null,LASTEV=0,route='',dirty=0;
+async function load(norender){let j;try{j=await (await fetch('/api/state')).json()}catch(e){return toast('Servidor offline. Rode node server.js','er')}
+ if(j.auth===false){ST=null;return showLogin()}
+ const roleCh=!ST||ST.role!==j.role||(j.seller&&ST.seller&&j.seller.id!==ST.seller.id)||(j.mgr&&ST.mgr&&j.mgr.id!==ST.mgr.id);ST=j;if(!LASTEV||roleCh)LASTEV=j.lastEv;
+ if(roleCh){route='';const k=rk();if(location.hash.slice(1).split('?')[0]!==k)history.replaceState(null,'','#'+k)}
+ $('#login').hidden=true;$('#app').hidden=false;if(norender&&typing()){dirty=1;return}render()}
+async function act(a,b={},errEl){const r=await fetch('/api/act',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...b,act:a})});const j=await r.json().catch(()=>({error:'Falha de rede'}));
+ if(!r.ok||j.error){const m=j.error||'Erro';if(errEl&&$(errEl))$(errEl).textContent=m;else toast(esc(m),'er');throw new Error(m)}await load();return j}
+setInterval(async()=>{if(!ST||document.hidden)return;try{const r=await fetch('/api/poll?ev='+LASTEV);if(r.status==401){ST=null;return showLogin()}const j=await r.json();for(const e of j.ev){if(e.id<=LASTEV)continue;LASTEV=e.id;notify(e)}if(j.mode&&j.mode!==ST.mode)load();else if(j.rev!==ST.rev)load(true)}catch(e){}},2000);
+const typing=()=>{const a=document.activeElement;return a&&$('#v').contains(a)&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)};
+document.addEventListener('focusout',()=>setTimeout(()=>{if(dirty&&!typing())render()},500));
+
+function notify(e){
+ if(ST.role=='seller'){
+  if(e.s!==me().id)return;
+  if(e.k=='paid')toast(`<span class="ti">${ico(I.pix,16)}</span><div>Pix pago na operação <b>${esc(e.un)}</b><br>Sua comissão: <b>${brl(e.net)}</b></div>`);
+  else if(e.k=='po_done'){const p=ST.po.find(x=>x.id==e.po);pop(p||{id:e.po,a:e.a,rc:brl(e.a),x:'sua conta'})}
+  else if(e.k=='po_ok')toast(`Saque de <b>${brl(e.a)}</b> aprovado — processando`,'wa');
+  else if(e.k=='po_rej')toast(`Saque de <b>${brl(e.a)}</b> foi recusado. O valor voltou para o saldo.`,'er');
+  else if(e.k=='dp_new')toast(`Nova disputa (MED) na operação <b>${esc(e.un)}</b> · ${brl(e.a)} — <a href="#disp">responder</a>`,'er');
+  else if(e.k=='dp_res')toast(`Disputa ${e.st=='Ganha'?'ganha ✓':'perdida'} na operação <b>${esc(e.un)}</b> · ${brl(e.a)}`,e.st=='Ganha'?'ok':'er');
+  else if(e.k=='blocked')toast(`Antifraude bloqueou um Pix de ${brl(e.a)} na operação <b>${esc(e.un)}</b> (${esc(e.rule)})`,'wa');
+ }else if(ST.role=='gerente'){
+  if(e.k=='paid')toast(`<span class="ti">${ico(I.sel,16)}</span><div>Venda na sua rede · <b>${esc(e.sn)}</b><br>Sua comissão: <b>${brl(e.cmMe)}</b></div>`);
+  else if(e.k=='signup')toast(`Novo cadastro na sua rede: <b>${esc(e.sn)}</b>`);
+ }else{
+  if(e.k=='paid')toast(`<span class="ti">${ico(I.pix,16)}</span><div>Pix pago · <b>${brl(e.a)}</b><br>${esc(e.sn)} · ${esc(e.un)}</div>`);
+  else if(e.k=='po_req'&&e.st=='Em análise')toast(`Saque aguardando aprovação: <b>${esc(e.sn)}</b> · ${brl(e.a)}`,'wa');
+  else if(e.k=='po_done')toast(`Saque pago: ${esc(e.sn)} · ${brl(e.a)}`);
+ }}
+
+/* ================= login ================= */
+const brandMark=(s=30)=>`<svg viewBox="0 0 48 48" width="${s}" height="${s}" aria-hidden="true"><rect width="48" height="48" rx="13" fill="url(#ngrad)"/><path d="M13 34C19.5 34 21 20.5 33 15.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="13" cy="34" r="3.7" fill="#fff"/><path d="M27 15.5L34 14.6L33.4 21.6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function showLogin(){$('#app').hidden=true;$('#modes').hidden=true;document.body.classList.remove('hasModes');const l=$('#login');l.hidden=false;l.innerHTML=`<form class="lcard" onsubmit="doLogin(event)"><span style="display:flex;align-items:center;gap:10px;margin-bottom:18px">${brandMark(32)}<b style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;letter-spacing:-.025em;color:var(--tx)">Norevia</b></span><h1 style="font-size:21px">Entrar no painel</h1><p class="sub">CEO ou seller</p><input class="in" id="le" type="email" placeholder="E-mail" autocomplete="username" required><input class="in" id="lp" type="password" placeholder="Senha" autocomplete="current-password" required><button class="btn big" style="margin-top:4px">Entrar</button><small class="err" id="lerr"></small><p class="sub" style="font-size:12px;margin:10px 0 0">Logins de teste (CEO, gerente e seller): <code>data/LOGINS.txt</code>, na pasta do projeto.</p></form>`;setTimeout(()=>$('#le').focus(),50)}
+async function doLogin(ev){ev.preventDefault();const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('#le').value,password:$('#lp').value})});const j=await r.json();if(!r.ok)return $('#lerr').textContent=j.error;LASTEV=0;ST=null;location.hash='';await load()}
+async function logout(){await fetch('/api/logout');ST=null;showLogin()}
+
+/* ================= CEO ================= */
+const V={};
+const ceoData=()=>{const M=MR(),S=ST.sales;return{M,cur:paidIn(S,M.m0,M.n),prev:paidIn(S,M.p0,M.pe)}};
+V.ceo=()=>{const{M,cur,prev}=ceoData(),tpv=sumA(cur),fee=sumF(cur),cost=sumC(cur),cmz=sumCm(cur),lucro=fee-cost-cmz,ptpv=sumA(prev),plucro=sumF(prev)-sumC(prev)-sumCm(prev),proj=M.el>0?tpv/(M.el/DAY)*M.dim:0,projL=M.el>0?lucro/(M.el/DAY)*M.dim:0;
+ const cust=ST.sellers.reduce((t,s)=>t+s.bal,0),pend=ST.po.filter(p=>p.st=='Em análise'),gen=genIn(ST.sales,M.m0,M.n),cr=cost&&tpv?cost/tpv:0;
+ const days=Array.from({length:M.day},(_,i)=>String(i+1).padStart(2,'0')),dT=daily(ST.sales,M.m0,M.day,x=>x.a),dL=daily(ST.sales,M.m0,M.day,x=>x.f-x.a*x.c-cmOf(x));
+ const d=Math.abs(ptpv)?tpv/ptpv-1:0;
+ return head('Visão CEO',`Mês de ${M.mn} até agora · comparado com o mesmo período de ${M.pn}`,`<span class="chiph">Atualizado ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>`)+
+ kp([['TPV do mês',tpv,`${d>=0?'▲':'▼'} ${pct(Math.abs(d))} vs ${M.pn} (${brl(ptpv)})`,'m','','hl'],['Custo do TPV',cost,`${pct(cr,2)} do TPV · adquirentes`,'m','er'],['Receita de taxas',fee,`take rate ${pct(tpv?fee/tpv:0,2)}`],['Comissões de gerentes',cmz,`${pct(fee?cmz/fee:0)} das taxas · <a href="#gerentes">ver gerentes</a>`,'m','er'],['Lucro da operação',lucro,`após custo e comissões · margem ${pct(tpv?lucro/tpv:0,2)} · ${M.pn}: ${brl(plucro)}`,'m',lucro>=0?'ok':'er'],
+ ['Projeção do mês',proj,`lucro projetado ${brl(projL)}`],['Pix pagos',cur.length,`ticket médio ${brl(cur.length?tpv/cur.length:0)}`,'i'],['Conversão Pix',conv(gen),`${nf(gen.length)} Pix gerados no mês`,'p'],['Saldo em custódia',cust,pend.length?`${pend.length} saque(s) aguardando · ${brl(pend.reduce((t,p)=>t+p.a,0))}`:'nenhum saque aguardando','m',pend.length?'er':'']])+
+ `<div class="g2h"><div class="card"><div class="ch"><b>TPV por dia · ${M.mn}</b><small>${brl(tpv)}</small></div>${bars(days,dT,x=>brl(x),M.day>16?3:1)}</div><div class="card"><div class="ch"><b>Lucro por dia</b><small>taxas − custo do TPV</small></div>${bars(days,dL,x=>brl(x),M.day>16?3:1,'okb')}</div></div>`+
+ desvioTbl(M)+acqTbl(cur,tpv)};
+function desvioTbl(M){const rows=ST.sellers.map(s=>{const a=ST.sales.filter(x=>x.s==s.id),c=paidIn(a,M.m0,M.n),p=paidIn(a,M.p0,M.pe),t=sumA(c),pt=sumA(p),from=dayStart(M.n)-13*DAY;return{s,t,pt,l:sumF(c)-sumC(c)-sumCm(c),tr:t?sumF(c)/t:0,cv:conv(genIn(a,M.m0,M.n)),sp:daily(a,from,14,x=>x.a),d:pt?t/pt-1:(t?1:0)}}).sort((a,b)=>b.t-a.t),tot=rows.reduce((x,r)=>x+r.t,0)||1;
+ const up=[...rows].sort((a,b)=>b.d-a.d)[0],dn=[...rows].sort((a,b)=>a.d-b.d)[0];
+ return `<h3>Desvio de cada player</h3><div class="chips" style="margin-bottom:10px">${up&&up.d>0?`<span class="b ok">Maior alta: ${esc(up.s.n)} ▲ ${pct(up.d,0)}</span>`:''}${dn&&dn.d<0?`<span class="b er">Maior queda: ${esc(dn.s.n)} ▼ ${pct(-dn.d,0)}</span>`:''}<span class="b">Desvio = TPV do mês vs mesmo período de ${M.pn}</span></div>`+
+ tbl(['Seller','Status','TPV do mês',M.pn+' (mesmo período)','Desvio','Participação','Lucro gerado','Take rate','Conversão','Últimos 14 dias',''],rows.map(r=>[`<b>${esc(r.s.n)}</b>`,bd(r.s.st),brl(r.t),brl(r.pt),dvB(r.t,r.pt),pct(r.t/tot),`<span class="${r.l>=0?'ok-t':'er-t'}">${brl(r.l)}</span>`,pct(r.tr,2),pct(r.cv,0),spark(r.sp,r.d<=-.15?'var(--er)':r.d>=.15?'var(--ok)':'var(--ac)'),`<button class="btn sm o" onclick="imp('${r.s.id}')">${ico(I.login,14)} Entrar</button>`]))}
+function acqTbl(cur,tpv){return `<h3>Por adquirente</h3>`+tbl(['Adquirente','Status','Custo','TPV roteado','Participação','Custo no mês','Sellers'],ST.acq.map(a=>{const x=cur.filter(s=>s.acq==a.id),t=sumA(x);return[`<b>${esc(a.n)}</b>`,bd(a.st),pct(a.cost,2),brl(t),pct(tpv?t/tpv:0),brl(sumC(x)),String(ST.sellers.filter(s=>s.acq==a.id).length)]}))}
+
+/* ---- Sellers ---- */
+let EDIT='',SEND='';
+V.sellers=()=>{const M=MR();return head('Sellers','Contas, taxas, adquirente e acesso',`<button class="btn" onclick="EDIT='new';render()">${ico(I.plus,16)} Novo seller</button>`)+(EDIT=='new'?sellerForm():'')+
+ tbl(['Seller','Subcontas','TPV do mês','Saldo','Taxa','Adquirente','Saque','Status',''],ST.sellers.flatMap(s=>{const t=sumA(paidIn(ST.sales.filter(x=>x.s==s.id),M.m0,M.n)),a=ST.acq.find(x=>x.id==s.acq);
+  const r=`<tr><td><b>${esc(s.n)}</b>${s.mgr?' <span class="b ac">gerente</span>':''}<br><small style="color:var(--mu)">${esc(s.email)}${s.ref?' · gerente: '+esc((ST.sellers.find(x=>x.id==s.ref)||{}).n||'—'):''}</small></td><td>${s.subs.length}</td><td>${brl(t)}</td><td><b>${brl(s.bal)}</b></td><td>${pct(s.fee.p,2)} + ${brl(s.fee.f)}</td><td>${esc(a?a.n:'—')}</td><td>${s.auto?'<span class="b ok">automático</span>':'<span class="b wa">com aprovação</span>'}</td><td>${bd(s.st)}</td><td><button class="btn sm" onclick="imp('${s.id}')">${ico(I.login,14)} Entrar na conta</button><button class="btn sm o" onclick="EDIT=EDIT=='${s.id}'?'':'${s.id}';SEND='';render()">Configurar</button><button class="btn sm o" onclick="SEND=SEND=='${s.id}'?'':'${s.id}';EDIT='';render()">Enviar saque</button></td></tr>`;
+  return EDIT==s.id?[r,`<tr class="edit"><td colspan="9">${sellerForm(s)}</td></tr>`]:SEND==s.id?[r,`<tr class="edit"><td colspan="9">${sendForm(s)}</td></tr>`]:[r]}))};
+function sellerForm(s){const n=!s;s=s||{n:'',email:'',fee:{p:.0499,f:1},acq:'core',auto:false,st:'Ativo'};const id=n?'new':s.id;
+ return `<div class="${n?'card static':''}"><b>${n?'Novo seller':'Configurar '+esc(s.n)}</b><div class="fm"><input id="sf_n" placeholder="Nome" value="${esc(s.n)}">${n?`<input id="sf_e" type="email" placeholder="E-mail de acesso">`:`<span class="chiph">${esc(s.email)}</span>`}</div>
+ <div class="fm"><label class="chiph">Taxa % <input id="sf_p" class="in" style="width:90px" type="number" step="0.01" min="0" value="${(s.fee.p*100).toFixed(2)}"></label><label class="chiph">+ fixa R$ <input id="sf_f" class="in" style="width:90px" type="number" step="0.01" min="0" value="${s.fee.f.toFixed(2)}"></label>
+ <label class="chiph">Adquirente <select id="sf_a" class="sel">${ST.acq.map(a=>`<option value="${a.id}" ${a.id==s.acq?'selected':''}>${esc(a.n)} (${pct(a.cost,2)} · ${a.st})</option>`).join('')}</select></label>
+ ${n?'':`<label class="chiph">Status <select id="sf_s" class="sel">${['Ativo','Bloqueado'].map(x=>`<option ${x==s.st?'selected':''}>${x}</option>`).join('')}</select></label>`}
+ <label class="chiph"><input type="checkbox" id="sf_au" ${s.auto?'checked':''}> Saque automático (sem aprovação)</label></div>
+ <div class="fm"><label class="chiph">Gerente responsável <select id="sf_r" class="sel"><option value="">Nenhum</option>${ST.sellers.filter(x=>x.mgr&&x.id!=s.id).map(x=>`<option value="${x.id}" ${x.id==s.ref?'selected':''}>${esc(x.n)}</option>`).join('')}</select></label>
+ <label class="chiph"><input type="checkbox" id="sf_g" ${s.mgr?'checked':''} onchange="$('#sf_gs').hidden=!this.checked"> É gerente</label><span id="sf_gs" class="row" style="margin:0" ${s.mgr?'':'hidden'}><label class="chiph">Fatia direta % <input id="sf_s1" class="in" style="width:80px" type="number" step="0.5" min="0" max="100" value="${s.mgr?(s.mgr.share*100).toFixed(1):'20'}"></label><label class="chiph">Indireta % <input id="sf_s2" class="in" style="width:80px" type="number" step="0.5" min="0" max="100" value="${s.mgr?(s.mgr.share2*100).toFixed(1):'5'}"></label></span></div>
+ <div class="fm"><input id="sf_pw" type="password" autocomplete="new-password" placeholder="${n?'Senha de acesso do seller (opcional, mín. 8)':s.hasPw?'Nova senha (deixe vazio para manter)':'Definir senha de acesso (mín. 8)'}" style="max-width:360px"></div>
+ <div class="sum" style="max-width:520px"><div><span>Seller paga por Pix de R$ 100</span><b id="sf_ex"></b></div><div><span>Lucro Norevia por Pix de R$ 100</span><b class="ok" id="sf_lx"></b></div></div>
+ <div class="row" style="margin-top:12px"><button class="btn" onclick="saveSeller('${id}')">${n?'Criar seller':'Salvar'}</button><button class="btn o" onclick="EDIT='';render()">Cancelar</button></div><small class="err" id="sf_err"></small></div>`}
+function sfPrev(){const p=+($('#sf_p')||{}).value/100,f=+($('#sf_f')||{}).value,a=ST.acq.find(x=>x.id==($('#sf_a')||{}).value);if(!$('#sf_ex'))return;const fe=100*p+f;$('#sf_ex').textContent=brl(fe);$('#sf_lx').textContent=brl(fe-100*(a?a.cost:.02))}
+document.addEventListener('input',e=>{if(/^sf_/.test(e.target.id))sfPrev()});
+async function saveSeller(id){const b={n:$('#sf_n').value,p:$('#sf_p').value,f:$('#sf_f').value,acq:$('#sf_a').value,auto:$('#sf_au').checked,ref:$('#sf_r').value,isMgr:$('#sf_g').checked,share:$('#sf_s1').value,share2:$('#sf_s2').value};const pw=$('#sf_pw').value;if(pw)b.pw=pw;
+ try{if(id=='new'){b.email=$('#sf_e').value;await act('sellerCreate',b,'#sf_err');toast('Seller <b>'+esc(b.n)+'</b> criado')}else{b.id=id;b.st=$('#sf_s').value;await act('sellerUpdate',b,'#sf_err');toast('Seller atualizado')}EDIT='';render()}catch(e){}}
+function sendForm(s){return `<b>Enviar saque para ${esc(s.n)}</b> <span class="chiph" style="display:inline">· saldo total ${brl(s.bal)}</span><div class="fm"><select id="as_u" class="sel">${s.subs.map(u=>`<option value="${u.id}" data-b="${u.bal}">${esc(u.n)} — ${brl(u.bal)}</option>`).join('')}</select><input id="as_a" type="number" step="0.01" min="1" placeholder="Valor (R$)" style="max-width:160px"><button class="btn o sm" onclick="$('#as_a').value=(+$('#as_u').selectedOptions[0].dataset.b).toFixed(2)">Máx.</button>
+ <select id="as_d" class="sel" onchange="$('#as_new').hidden=this.value!='new'">${(s.dest||[]).map((d,i)=>`<option value="${i}">${esc(d.label)}</option>`).join('')}<option value="new">Nova chave Pix…</option></select></div>
+ <div id="as_new" class="fm" ${(s.dest||[]).length?'hidden':''}><select id="as_b" class="sel">${BANKS.br.map(b=>`<option>${b[0]}</option>`).join('')}</select><input id="as_k" placeholder="Chave Pix"><input id="as_k2" placeholder="Confirme a chave Pix" autocomplete="off"></div>
+ <button class="btn" onclick="adminSend('${s.id}')">Enviar agora</button><small class="err" id="as_err"></small>`}
+async function adminSend(id){const s=ST.sellers.find(x=>x.id==id),v=$('#as_d').value;let dest;if(v=='new'){const k=$('#as_k').value.trim();if(!pixT(k))return $('#as_err').textContent='Chave Pix inválida.';if(pixT(k)[2]!=(pixT($('#as_k2').value)||[])[2])return $('#as_err').textContent='As chaves não conferem.';dest={reg:'br',bank:$('#as_b').value,k}}else dest=s.dest[+v];
+ const a=+$('#as_a').value;try{await act('poSend',{s:id,u:$('#as_u').value,a,dest},'#as_err');SEND='';render();toast(`Saque de ${brl(a)} enviado para ${esc(s.n)}`)}catch(e){}}
+async function imp(id){await act('impersonate',{id});location.hash='home';toast('Você entrou na conta de <b>'+esc(ST.seller.n)+'</b>','wa')}
+async function unimp(){await act('unimpersonate');location.hash='sellers'}
+
+/* ---- Saques (CEO) ---- */
+let POF='Em análise';
+V.saques=()=>{const M=MR(),po=ST.po,sn=id=>(ST.sellers.find(s=>s.id==id)||{}).n||'—',an=po.filter(p=>p.st=='Em análise'),pr=po.filter(p=>p.st=='Processando'),pg=po.filter(p=>p.st=='Concluído'&&p.dt>=M.m0),l=po.filter(p=>POF=='Todos'||p.st==POF).slice(0,60);
+ return head('Saques','Aprove, recuse ou envie saques de qualquer seller')+kp([['Aguardando aprovação',an.reduce((t,p)=>t+p.a,0),an.length+' saque(s)','m',an.length?'er':''],['Processando',pr.reduce((t,p)=>t+p.a,0),pr.length+' saque(s)'],['Pagos no mês',pg.reduce((t,p)=>t+p.a,0),pg.length+' saque(s)'],['Saldo em custódia',ST.sellers.reduce((t,s)=>t+s.bal,0),'disponível para saque nos sellers']])+
+ `<div class="row"><span class="tgl">${['Em análise','Processando','Concluído','Recusado','Todos'].map(x=>`<button class="${x==POF?'on':''}" onclick="POF='${x}';render()">${x}</button>`).join('')}</span><span class="chiph">Para enviar um saque, use <a href="#sellers">Sellers → Enviar saque</a></span></div>`+
+ tbl(['Saque','Seller','Destino','Valor','Recebe','Origem','Quando','Status',''],l.map(p=>[`<span class="mono">${p.id.slice(0,10)}</span>`,esc(sn(p.s)),`<span class="src">${bl(bankOf(p.dest&&p.dest.bank))}${esc(p.x)}</span>`,`<b>${brl(p.a)}</b>`,esc(p.rc),p.by=='admin'?'CEO':'seller',dt(p.ts),bd(p.st),p.st=='Em análise'?`<button class="btn sm ok" onclick="act('poApprove',{id:'${p.id}'}).then(()=>toast('Saque aprovado'))">Aprovar</button><button class="btn sm er" onclick="if(confirm('Recusar este saque? O valor volta para o saldo do seller.'))act('poReject',{id:'${p.id}'})">Recusar</button>`:'']),'Nenhum saque com esse status.')};
+
+/* ---- Adquirentes ---- */
+let AE='';
+V.acq=()=>{const M=MR(),cur=paidIn(ST.sales,M.m0,M.n),tpv=sumA(cur);return head('Adquirentes','Players que liquidam o Pix. Cada seller é roteado para o adquirente definido; se ele não estiver ativo, cai no primeiro ativo.',`<button class="btn" onclick="AE='new';render()">${ico(I.plus,16)} Novo adquirente</button>`)+
+ (AE=='new'?`<div class="card static">${acqForm()}</div>`:'')+
+ tbl(['Adquirente','Status','Custo sobre TPV','TPV no mês','Participação','Custo no mês','Sellers',''],ST.acq.flatMap(a=>{const x=cur.filter(s=>s.acq==a.id),t=sumA(x);const r=`<tr><td><b>${esc(a.n)}</b></td><td>${bd(a.st)}</td><td>${pct(a.cost,2)}</td><td>${brl(t)}</td><td>${pct(tpv?t/tpv:0)}</td><td>${brl(sumC(x))}</td><td>${ST.sellers.filter(s=>s.acq==a.id).map(s=>esc(s.n)).join(', ')||'—'}</td><td><button class="btn sm o" onclick="AE=AE=='${a.id}'?'':'${a.id}';render()">Editar</button></td></tr>`;return AE==a.id?[r,`<tr class="edit"><td colspan="8">${acqForm(a)}</td></tr>`]:[r]}))+
+ `<p class="sub">O custo de cada Pix fica gravado na transação no momento do pagamento — mudar o custo aqui não altera o histórico.</p>`};
+const acqForm=a=>{a=a||{id:'',n:'',cost:.02,st:'Ativo'};return `<div class="fm"><input id="aq_n" placeholder="Nome do adquirente" value="${esc(a.n)}"><label class="chiph">Custo % <input id="aq_c" class="in" style="width:90px" type="number" step="0.01" value="${(a.cost*100).toFixed(2)}"></label><select id="aq_s" class="sel">${['Ativo','Standby','Inativo'].map(x=>`<option ${x==a.st?'selected':''}>${x}</option>`).join('')}</select><button class="btn" onclick="act('acqSave',{id:'${a.id}',n:$('#aq_n').value,cost:$('#aq_c').value,st:$('#aq_s').value},'#aq_err').then(()=>{AE='';render();toast('Adquirente salvo')})">Salvar</button><button class="btn o" onclick="AE='';render()">Cancelar</button></div><small class="err" id="aq_err"></small>`};
+
+/* ---- Transações (CEO) ---- */
+let TXS='',TXF='Todos',TXL=50;
+V.tx=()=>{const sn=id=>(ST.sellers.find(s=>s.id==id)||{}),an=id=>(ST.acq.find(a=>a.id==id)||{}).n||'—';const l=ST.sales.filter(x=>(!TXS||x.s==TXS)&&(TXF=='Todos'||x.st==TXF)).slice().reverse();
+ return head('Transações','Todos os Pix da plataforma')+`<div class="row"><select class="sel" onchange="TXS=this.value;TXL=50;render()"><option value="">Todos os sellers</option>${ST.sellers.map(s=>`<option value="${s.id}" ${s.id==TXS?'selected':''}>${esc(s.n)}</option>`).join('')}</select><span class="tgl">${['Todos','Pago','Pendente','Expirado'].map(x=>`<button class="${x==TXF?'on':''}" onclick="TXF='${x}';TXL=50;render()">${x}</button>`).join('')}</span><span class="chiph">${nf(l.length)} transações</span></div>`+
+ tbl(['Pix','Seller','Subconta','Valor','Taxa cobrada','Custo TPV','Comissão gerente','Lucro','Adquirente','Origem','Quando','Status'],l.slice(0,TXL).map(x=>{const s=sn(x.s),u=(s.subs||[]).find(u=>u.id==x.u)||{},pd=x.st=='Pago';return[`<span class="mono">${x.id.slice(0,11)}</span>`,esc(s.n),esc(u.n),brl(x.a),pd?brl(x.f):'—',pd?brl(x.a*x.c):'—',pd&&cmOf(x)?brl(cmOf(x)):'—',pd?`<span class="ok-t">${brl(x.f-x.a*x.c-cmOf(x))}</span>`:'—',esc(an(x.acq)),srcL(x.src),dt(x.ts),bd(x.st)]}))+(l.length>TXL?`<button class="btn o" onclick="TXL+=50;render()">Carregar mais</button>`:'')};
+
+/* ================= SELLER ================= */
+const me=()=>ST.seller,subN=id=>(me().subs.find(u=>u.id==id)||{}).n||'—';
+const selSub=()=>{const s=me().subs,id=P['sf_'+me().id];return s.find(u=>u.id==id)||s[0]};
+const setSub=id=>{P['sf_'+me().id]=id;psave();TESTPIX=null;W.amt='';render()};
+const subPicker=()=>'';
+const mySales=()=>{const id=selSub().id;return ST.sales.filter(x=>x.u==id)};
+const lost=x=>x.dp&&x.dp.st=='Perdida';
+const prodOf=id=>{for(const u of me().subs){const p=u.prods.find(x=>x.id==id);if(p)return p}return null};
+const payUrl=id=>ST.srv.base+'/pay/'+id;
+
+/* ---- seletor de subconta (topo) ---- */
+function acctModal(){const cur=selSub();modal(`<div class="ch"><h2 style="margin:0">Gerenciar Subcontas</h2><button class="icb" data-x aria-label="Fechar">✕</button></div><p style="margin:6px 0 16px">Alterne entre suas contas ou crie novas subcontas com saldos, produtos e integrações <b style="color:var(--tx)">totalmente isolados</b>.</p>
+ <div class="lbx">Minhas contas &amp; subcontas</div><div class="acl">${me().subs.map(u=>`<div class="acr ${u.id==cur.id?'on':''}"><i>${esc(u.n[0])}</i><div><b>${esc(u.n)}</b><small>${brl(u.bal)} disponível · ${u.prods.length} produto(s)</small></div>${u.id==cur.id?'<span class="b ac">Conta ativa</span>':`<button class="btn sm o" data-x onclick="setSub('${u.id}');toast('Subconta trocada')">Trocar</button>`}</div>`).join('')}</div>
+ <div class="lbx" style="margin-top:18px">Criar nova subconta</div><label class="chiph" style="margin-bottom:6px">Nome da subconta</label><input class="in" id="ns_n" placeholder="Ex: Produto A — Oferta Principal" maxlength="60" style="width:100%"><small style="color:var(--mu);display:block;margin:4px 0 12px">Entre 3 e 60 caracteres.</small><button class="btn big" style="margin-top:0" onclick="newSub()">Confirmar e Criar</button><small class="err" id="ns_e"></small>`)}
+async function newSub(){const n=$('#ns_n').value.trim();if(n.length<3)return $('#ns_e').textContent='Use entre 3 e 60 caracteres.';try{const j=await act('subCreate',{n},'#ns_e');document.querySelectorAll('.ov').forEach(o=>o.remove());setSub(j.id);toast('Subconta <b>'+esc(n)+'</b> criada e ativada')}catch(e){}}
+
+/* ---- Visão geral ---- */
+V.home=()=>{const u=selSub(),M=MR(),a=mySales(),cur=paidIn(a,M.m0,M.n),prev=paidIn(a,M.p0,M.pe),c=sumN(cur),pc=sumN(prev),gen=genIn(a,M.m0,M.n),today=paidIn(a,dayStart(M.n),M.n),from=dayStart(M.n)-13*DAY,dl=Array.from({length:14},(_,i)=>new Date(from+i*DAY).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}));
+ const bs={};cur.forEach(x=>bs[x.src]=(bs[x.src]||0)+net(x));const sk=Object.entries(bs).sort((x,y)=>y[1]-x[1]),smx=sk.length?sk[0][1]:1;
+ return head('Visão geral',`Subconta ${esc(u.n)} · ${M.mn}`)+
+ kp([['Comissões do mês',c,`${c>=pc?'▲':'▼'} ${pct(pc?Math.abs(c/pc-1):0)} vs ${M.pn}`,'m','','hl'],['Comissões hoje',sumN(today),today.length+' Pix pagos'],['Pix pagos no mês',cur.length,`${nf(gen.length)} gerados`,'i'],['Conversão Pix',conv(gen),'pagos ÷ gerados','p'],['Saldo disponível',u.bal,'pronto para sacar']])+
+ `<div class="g2"><div class="card"><div class="ch"><b>Comissões dos últimos 14 dias</b></div>${bars(dl,daily(a,from,14,net),x=>brl(x),1,'okb')}</div><div class="card"><b>Comissão por origem</b><div class="sp">${sk.map(([k,v])=>`<div class="r"><span>${srcL(k)}</span><span>${brl(v)}</span></div><u><s style="width:${v/smx*100}%"></s></u>`).join('')||'<p class="sub">Sem vendas no mês.</p>'}</div></div></div>`+
+ `<h3>Por produto</h3>`+tbl(['Produto','Pix pagos no mês','Comissão no mês','Conversão'],u.prods.map(p=>{const x=a.filter(s=>s.pid==p.id),c2=paidIn(x,M.m0,M.n);return[`<b>${esc(p.n)}</b>`,String(c2.length),brl(sumN(c2)),pct(conv(genIn(x,M.m0,M.n)),0)]}),'Nenhum produto nesta subconta.')+
+ `<h3>Últimas vendas</h3>`+saleTbl(a.slice(-8).reverse())};
+const saleTbl=l=>tbl(['Dash (subconta)','Comissão','Status','Quando'],l.map(x=>[`<b>${esc(subN(x.u))}</b>`,x.st=='Pago'?`<b class="ok-t">${brl(net(x))}</b>`:`<span style="color:var(--mu)">${brl(net(x))}</span>`,bd(x.st),ago(x.pt||x.ts)]),'Nenhuma venda ainda.');
+
+/* ---- Vendas ---- */
+let VF='Todas',VL=30;
+V.vendas=()=>{const a=mySales().slice().reverse(),l=a.filter(x=>VF=='Todas'||x.st==VF),M=MR(),cur=paidIn(a,M.m0,M.n);
+ return head('Vendas','Subconta '+esc(selSub().n))+kp([['Comissões do mês',sumN(cur),cur.length+' Pix pagos'],['Pendentes',a.filter(x=>x.st=='Pendente').length,'aguardando pagamento','i'],['Expirados no mês',genIn(a,M.m0,M.n).filter(x=>x.st=='Expirado').length,'Pix não pagos','i']])+
+ `<div class="row"><span class="tgl">${['Todas','Pago','Pendente','Expirado','Bloqueado'].map(x=>`<button class="${x==VF?'on':''}" onclick="VF='${x}';VL=30;render()">${x}</button>`).join('')}</span><span class="chiph">${nf(l.length)} venda(s)</span></div>`+saleTbl(l.slice(0,VL))+(l.length>VL?`<button class="btn o" onclick="VL+=30;render()">Carregar mais</button>`:'')};
+
+/* ---- Produtos ---- */
+V.produtos=()=>{const u=selSub(),M=MR(),a=mySales();return head('Produtos','Catálogo da subconta '+esc(u.n)+' — cada produto já tem link de pagamento Pix')+
+ `<div class="card static"><b>Novo produto</b><div class="fm"><input id="pn" placeholder="Nome do produto"><input id="pp" type="number" min="1" step="0.01" placeholder="Preço (R$)" style="max-width:150px"><select id="pt" class="sel"><option>Infoproduto</option><option>Físico</option><option>Assinatura</option></select><button class="btn" onclick="prodNew()">Adicionar</button></div><small class="err" id="pe"></small></div>`+
+ tbl(['Produto','Tipo','Preço','Pix pagos (mês)','Comissão (mês)','Link de pagamento','Status',''],u.prods.map(p=>{const x=a.filter(s=>s.pid==p.id),c=paidIn(x,M.m0,M.n),hasS=x.length>0;return[`<b>${esc(p.n)}</b>`,p.t,brl(p.p),String(c.length),brl(sumN(c)),`<button class="btn sm o" onclick="copy('${payUrl(p.id)}')">Copiar link</button><a class="btn sm o" href="${payUrl(p.id)}" target="_blank" rel="noopener">Abrir</a>`,`<button class="b ${p.st=='Ativo'?'ok':'wa'}" style="border:0;cursor:pointer" title="Clique para ${p.st=='Ativo'?'pausar':'ativar'}" onclick="act('prodToggle',{u:'${u.id}',id:'${p.id}'})">${p.st}</button>`,`<button class="btn sm o" onclick="prodEdit('${p.id}')">Editar</button>${hasS?'':`<button class="btn sm er" onclick="if(confirm('Excluir produto?'))act('prodDelete',{u:'${u.id}',id:'${p.id}'})">Excluir</button>`}`]}),'Nenhum produto. Crie o primeiro acima.')};
+async function prodNew(){try{await act('prodSave',{u:selSub().id,n:$('#pn').value,p:$('#pp').value,t:$('#pt').value},'#pe');toast('Produto criado — link de pagamento pronto')}catch(e){}}
+function prodEdit(id){const p=prodOf(id);modal(`<h2 style="margin-top:0">Editar produto</h2><label class="lb">Nome</label><input class="in" id="ep_n" value="${esc(p.n)}" style="width:100%"><label class="lb">Preço (R$)</label><input class="in" id="ep_p" type="number" step="0.01" min="1" value="${p.p}" style="width:100%"><label class="lb">Tipo</label><select class="sel" id="ep_t" style="width:100%">${['Infoproduto','Físico','Assinatura'].map(t=>`<option ${t==p.t?'selected':''}>${t}</option>`).join('')}</select><div class="row" style="margin-top:14px"><button class="btn" onclick="act('prodSave',{u:selSub().id,id:'${id}',n:$('#ep_n').value,p:$('#ep_p').value,t:$('#ep_t').value},'#ep_e').then(()=>{document.querySelectorAll('.ov').forEach(o=>o.remove());toast('Produto atualizado')})">Salvar</button><button class="btn o" data-x>Cancelar</button></div><small class="err" id="ep_e"></small>`)}
+
+/* ---- Clientes ---- */
+V.clientes=()=>{const g={};mySales().filter(x=>x.st=='Pago'&&x.cl).forEach(x=>{const k=x.em||x.cl,c=g[k]=g[k]||{n:x.cl,em:x.em,doc:x.doc,o:0,v:0,cm:0,t:0};c.o++;c.v+=x.a;c.cm+=net(x);c.t=Math.max(c.t,x.pt)});const r=Object.values(g).sort((a,b)=>b.v-a.v),tv=r.reduce((t,c)=>t+c.v,0);
+ return head('Clientes','Compradores da subconta '+esc(selSub().n))+kp([['Clientes',r.length,'compradores únicos','i'],['LTV médio',r.length?tv/r.length:0,'valor pago por cliente'],['Recompra',r.length?r.filter(c=>c.o>1).length/r.length:0,'compraram 2+ vezes','p']])+
+ tbl(['Cliente','E-mail','CPF','Pedidos','Total pago','Comissão gerada','Último pedido'],r.slice(0,80).map(c=>[`<b>${esc(c.n)}</b>`,esc(c.em||'—'),`<span class="mono">${esc(c.doc||'—')}</span>`,String(c.o),brl(c.v),`<span class="ok-t">${brl(c.cm)}</span>`,ago(c.t)]),'Nenhum cliente ainda.')};
+
+/* ---- Checkout ---- */
+V.checkout=()=>{const M=MR(),a=mySales(),gen=genIn(a,M.m0,M.n),pd=gen.filter(x=>x.st=='Pago'),CKS=[...new Set(a.map(x=>x.ck).filter(Boolean))];
+ return head('Checkout','Conversão de cada forma de cobrança · '+M.mn)+kp([['Pix gerados',gen.length,'no mês','i'],['Conversão',conv(gen),pd.length+' pagos','p'],['Ticket médio',pd.length?sumA(pd)/pd.length:0,'valor por Pix pago']])+
+ tbl(['Checkout','Pix gerados','Pagos','Conversão','Comissão','Ticket médio'],CKS.map(k=>{const t=gen.filter(x=>x.ck==k),o=t.filter(x=>x.st=='Pago');return[`<b>${esc(k)}</b>`,String(t.length),String(o.length),t.length?pct(o.length/t.length):'—',brl(sumN(o)),o.length?brl(sumA(o)/o.length):'—']}),'Sem cobranças no mês.')+
+ `<div class="card static"><b>Checkout hospedado Norevia</b><p class="sub" style="margin:4px 0 0">Cada produto tem uma página de pagamento Pix pronta (QR Code, copia e cola e confirmação automática). Os parâmetros da URL (utm, ttclid, fbclid…) são gravados na venda e alimentam o Tracker. Pegue os links em <a href="#links">Links de pagamento</a>.</p></div>`};
+
+/* ---- Links de pagamento ---- */
+V.links=()=>{const M=MR(),a=mySales().filter(x=>x.ck=='Link de pagamento');return head('Links de pagamento','Venda direto por link, sem loja — Pix com confirmação automática')+
+ tbl(['Link','Produto','Preço','Pix gerados (mês)','Pagos','Conversão','Comissão (mês)',''],selSub().prods.map(p=>{const x=genIn(a.filter(s=>s.pid==p.id),M.m0,M.n),o=x.filter(s=>s.st=='Pago');return[`<span class="mono" style="font-size:12px">${esc(payUrl(p.id).replace(/^https?:\/\//,''))}</span>`,esc(p.n),brl(p.p),String(x.length),String(o.length),x.length?pct(o.length/x.length,0):'—',brl(sumN(o)),`<button class="btn sm o" onclick="copy('${payUrl(p.id)}')">Copiar</button><a class="btn sm" href="${payUrl(p.id)}?utm_source=teste&utm_medium=organic" target="_blank" rel="noopener">Testar checkout</a>`]}),'Crie produtos para ter links.')+
+ `<p class="sub">Dica: gere o link com UTMs no <a href="#track">Tracker</a> e cole a URL do produto como destino.</p>`};
+
+/* ---- Assinaturas ---- */
+V.assin=()=>{const u=selSub(),sp=u.prods.filter(p=>p.t=='Assinatura').map(p=>p.id),g={};mySales().filter(x=>x.st=='Pago'&&sp.includes(x.pid)).forEach(x=>{const k=(x.em||x.cl)+'|'+x.pid;if(!g[k]||g[k].pt<x.pt)g[k]=x});
+ const r=Object.values(g).map(x=>({x,on:Date.now()-x.pt<35*DAY})),at=r.filter(z=>z.on),mrr=sumA(at.map(z=>z.x));
+ return head('Assinaturas','Produtos do tipo Assinatura · cada ciclo gera um novo Pix')+kp([['Assinantes ativos',at.length,'pagaram nos últimos 35 dias','i'],['MRR',mrr,'receita recorrente mensal'],['Atrasados',r.length-at.length,'sem pagamento no ciclo','i',r.length-at.length?'er':'']])+
+ tbl(['Cliente','Plano','Valor/mês','Último pagamento','Próxima cobrança','Status'],r.sort((a,b)=>b.x.pt-a.x.pt).slice(0,80).map(({x,on})=>[esc(x.cl||'—'),esc(x.pr),brl(x.a),dt(x.pt),new Date(x.pt+30*DAY).toLocaleDateString('pt-BR'),on?bd('Ativo'):'<span class="b er">Atrasada</span>']),sp.length?'Nenhum assinante ainda.':'Crie um produto do tipo Assinatura em Produtos.')};
+
+/* ---- Integrações ---- */
+V.integ=()=>{const u=selSub(),ads=u.ads||{},nk=(me().keys||[]).filter(k=>k.u==u.id).length,st=k=>ads[k]?(ads[k].mode=='live'?'Conectado':'Demonstração'):'Não conectado';
+ const L=[[LG('tiktok',22),'TikTok Ads','Events API + gasto',st('tiktok'),'#track'],[LG('meta',22),'Meta Ads','Conversions API',st('meta'),'#track'],[LG('google',22),'Google Ads','Conversões',st('google'),'#track'],[LG('kwai',22),'Kwai Ads','Conversões',st('kwai'),'#track'],[ico(I.k,20),'API Pix',nk+' credencial(is)',nk?'Conectado':'Não conectado','#api'],[ico(I.link,20),'Webhook','charge.paid, payout.paid…',u.wh?'Conectado':'Não conectado','#api'],[ico(I.cart,20),'Checkout hospedado','links de pagamento','Conectado','#links']];
+ return head('Integrações','Tudo que está ligado na subconta '+esc(u.n))+kp([['Conectadas',L.filter(x=>x[3]!='Não conectado').length,'de '+L.length,'i']])+
+ tbl(['Integração','O que faz','Status',''],L.map(x=>[`<span class="src">${x[0]}<b>${x[1]}</b></span>`,x[2],bd(x[3]),`<a class="btn sm o" href="${x[4]}">${x[3]=='Não conectado'?'Conectar':'Gerenciar'}</a>`]))+
+ `<div class="card static"><b>Shopify, WooCommerce, Zapier, n8n</b><p class="sub" style="margin:4px 0 0">Conecte qualquer loja ou automação usando a <a href="#api">API Pix</a> (criar cobrança) e o webhook (receber pagamento). A documentação está na aba API Pix.</p></div>`};
+
+/* ---- Disputas (MED) ---- */
+V.disp=()=>{const u=selSub(),a=mySales(),pd=a.filter(x=>x.st=='Pago'),ds=pd.filter(x=>x.dp),op=ds.filter(x=>x.dp.st=='Aberta'||x.dp.st=='Em defesa'),lo=ds.filter(lost);
+ return head('Disputas','Pedidos de devolução via MED e contestações · subconta '+esc(u.n))+kp([['Taxa de disputa',pd.length?ds.length/pd.length:0,ds.length+' de '+pd.length+' Pix pagos','p'],['Em aberto',op.length,'aguardando você ou a análise','i',op.length?'er':''],['Valor em disputa',sumA(op),'casos abertos'],['Devolvido',sumA(lo),'debitado do saldo','m','er']])+
+ tbl(['Caso','Cliente','Produto','Motivo','Valor','Aberta','Prazo','Status',''],ds.sort((x,y)=>y.dp.ts-x.dp.ts).map(x=>[`<span class="mono">${x.dp.id}</span>`,esc(x.cl||'—'),esc(x.pr),esc(x.dp.mo),brl(x.a),dt(x.dp.ts),x.dp.st=='Aberta'?new Date(x.dp.ts+7*DAY).toLocaleDateString('pt-BR'):'—',x.dp.st=='Em defesa'?'<span class="b ac"><span class="spin" style="width:10px;height:10px"></span>Em defesa</span>':bd(x.dp.st=='Perdida'&&x.dp.acc?'Devolvido':x.dp.st),x.dp.st=='Aberta'?`<button class="btn sm" onclick="dpDefend('${x.id}')">Contestar</button><button class="btn sm er" onclick="if(confirm('Aceitar a devolução de ${brl(x.a)}? O valor sai do saldo desta subconta.'))act('dpAccept',{id:'${x.id}'}).then(()=>toast('Devolução aceita','wa'))">Aceitar</button>`:'']),'Nenhuma disputa. 🎉')+
+ `<p class="sub">Disputa perdida devolve o valor pago ao comprador e é debitada do saldo da subconta.</p>`};
+function dpDefend(id){const x=ST.sales.find(s=>s.id==id);modal(`<h2 style="margin-top:0">Contestar ${x.dp.id}</h2><p>${esc(x.cl||'')} · ${esc(x.pr)} · ${brl(x.a)}<br>Motivo: ${esc(x.dp.mo)}</p><label class="lb">Sua defesa</label><textarea class="in" id="dd_t" rows="5" style="width:100%;resize:vertical" placeholder="Ex.: acesso liberado em 12/11 às 14h para o e-mail do comprador, aulas assistidas…"></textarea><div class="row" style="margin-top:12px"><button class="btn" onclick="act('dpDefend',{id:'${id}',txt:$('#dd_t').value},'#dd_e').then(()=>{document.querySelectorAll('.ov').forEach(o=>o.remove());toast('Defesa enviada para análise')})">Enviar defesa</button><button class="btn o" data-x>Cancelar</button></div><small class="err" id="dd_e"></small>`)}
+
+/* ---- Antifraude ---- */
+V.anti=()=>{const u=selSub(),af=u.af,M=MR(),a=mySales(),bl=a.filter(x=>x.st=='Bloqueado'),blm=bl.filter(x=>x.ts>=M.m0),tot=a.filter(x=>x.ts>=M.m0).length;
+ const rr={};blm.forEach(x=>rr[x.rule]=(rr[x.rule]||0)+1);
+ return head('Antifraude','Regras aplicadas antes de gerar cada Pix · subconta '+esc(u.n))+kp([['Bloqueados no mês',blm.length,'tentativas barradas','i'],['Taxa de bloqueio',tot?blm.length/tot:0,'das tentativas','p'],['Valor bloqueado',sumA(blm),'não cobrado']])+
+ `<div class="g2h"><div class="card static"><b>Regras</b>
+ <div class="row" style="justify-content:space-between;border-bottom:1px dashed var(--bd);padding:6px 0"><span>Limitar a 3 Pix por CPF por hora<br><small style="color:var(--mu)">${rr['Muitos Pix por CPF (1h)']||0} bloqueio(s) no mês</small></span><button class="sw ${af.vel?'on':''}" onclick="afSave({vel:${!af.vel}})"></button></div>
+ <div class="row" style="justify-content:space-between;border-bottom:1px dashed var(--bd);padding:6px 0"><span>Bloquear e-mails descartáveis<br><small style="color:var(--mu)">${rr['E-mail descartável']||0} bloqueio(s) no mês</small></span><button class="sw ${af.disp?'on':''}" onclick="afSave({disp:${!af.disp}})"></button></div>
+ <div class="row" style="justify-content:space-between;padding:6px 0"><span>Valor máximo por Pix (0 = sem limite)<br><small style="color:var(--mu)">${rr['Valor acima do limite']||0} bloqueio(s) no mês</small></span><span class="row" style="margin:0"><input class="in" id="af_m" type="number" min="0" step="1" value="${af.max}" style="width:120px"><button class="btn sm o" onclick="afSave({max:$('#af_m').value})">Salvar</button></span></div><small class="err" id="af_e"></small></div>
+ <div class="card static"><b>Lista negra</b><p class="sub" style="margin:4px 0 0">CPF, CNPJ ou e-mail que nunca podem pagar nesta subconta. ${rr['Lista negra']||0} bloqueio(s) no mês.</p><div class="fm"><input id="bl_v" placeholder="CPF, CNPJ ou e-mail"><button class="btn o" onclick="act('blAdd',{u:'${u.id}',v:$('#bl_v').value},'#bl_e').then(()=>toast('Adicionado à lista negra'))">Adicionar</button></div><small class="err" id="bl_e"></small><div class="chips">${af.bl.map(v=>`<span class="pchip">${esc(/@/.test(v)?v:mask(v))}<button title="Remover" onclick="act('blDel',{u:'${u.id}',v:'${esc(v)}'})">×</button></span>`).join('')||'<span class="chiph">Lista vazia.</span>'}</div></div></div>`+
+ `<h3>Tentativas bloqueadas</h3>`+tbl(['Cliente','Produto','Valor','Regra','Quando'],bl.slice(-40).reverse().map(x=>[esc(x.cl||'—'),esc(x.pr),brl(x.a),`<span class="b er">${esc(x.rule)}</span>`,dt(x.ts)]),'Nada bloqueado ainda.')};
+async function afSave(ch){const u=selSub(),af={...u.af,...ch};try{await act('afSave',{u:u.id,vel:af.vel,disp:af.disp,max:af.max},'#af_e');toast('Regras salvas')}catch(e){}}
+
+/* ---- Subcontas ---- */
+V.subs=()=>{const M=MR(),cur=selSub();return head('Subcontas','Cada operação tem sua subconta: saldo, produtos, chaves de API, webhook e pixels separados',`<button class="btn" onclick="acctModal()">${ico(I.plus,16)} Nova subconta</button>`)+
+ `<div class="kp">${me().subs.map(u=>{const x=ST.sales.filter(s=>s.u==u.id),c=paidIn(x,M.m0,M.n),k=(me().keys||[]).filter(k=>k.u==u.id).length;return `<div class="card"><div class="ch"><b style="font-size:16px">${esc(u.n)}</b>${u.id==cur.id?'<span class="b ac">Conta ativa</span>':`<button class="btn sm o" onclick="setSub('${u.id}')">Trocar</button>`}</div><div class="mk"><div><small>Saldo</small><b>${brl(u.bal)}</b></div><div><small>Comissões no mês</small><b>${brl(sumN(c))}</b></div><div><small>Pix pagos</small><b>${c.length}</b></div><div><small>Produtos</small><b>${u.prods.length}</b></div></div><div class="row"><span class="b ${k?'ok':''}">${k} chave(s) API</span><span class="b ${u.wh?'ok':''}">${u.wh?'webhook ativo':'sem webhook'}</span>${Object.keys(u.ads||{}).map(a=>LG(a,20)).join('')}</div><div class="row"><button class="btn sm o" onclick="renSub('${u.id}')">Renomear</button>${x.length?'':`<button class="btn sm er" onclick="if(confirm('Excluir subconta?'))act('subDelete',{id:'${u.id}'})">Excluir</button>`}</div></div>`}).join('')}</div>`};
+async function renSub(id){const n=prompt('Novo nome (3 a 60 caracteres):',subN(id));if(n)await act('subRename',{id,n})}
+
+/* ---- Tracker ---- */
+V.track=()=>{const u=selSub(),M=MR(),a=ST.sales.filter(x=>x.u==u.id),cur=paidIn(a,M.m0,M.n),g={},cp={};cur.forEach(x=>{const o=g[x.src]=g[x.src]||{n:x.src,o:0,v:0};o.o++;o.v+=net(x);if(x.cp){const k=x.src+'|'+x.cp,c=cp[k]=cp[k]||{s:x.src,c:x.cp,o:0,v:0};c.o++;c.v+=net(x)}});const sp=spendBy(u,a);
+ return head('Tracker',`Rastreamento próprio da subconta · ${M.mn}`,subPicker())+
+ `<h3 style="margin-top:0">Parâmetros de URL (orgânico e pago)</h3>`+trkCard(u)+
+ `<h3>Integrações de anúncios</h3>`+ttCard(u)+`<div class="pl">${metaCard(u)}${demoCard(u,'google','Google Ads',['ID do cliente (000-000-0000)','ID de conversão (AW-...)'])}${demoCard(u,'kwai','Kwai Ads',['ID da conta','ID do Pixel Kwai'])}</div>`+
+ `<h3>Resultado por origem</h3>`+tbl(['Origem','Pix pagos','Comissão','Gasto','ROAS','CPA'],Object.values(g).sort((x,y)=>y.v-x.v).map(c=>{const s=sp[c.n]||0;return[srcL(c.n),String(c.o),brl(c.v),s?brl(s):c.n=='organico'?'—':'<small style="color:var(--mu)">conecte a conta</small>',s?xr(c.v/s):'—',s?brl(s/c.o):'—']}),'Sem vendas nesta subconta no mês.')+
+ `<h3>Por campanha (utm_campaign)</h3>`+tbl(['Campanha','Origem','Pix pagos','Comissão'],Object.values(cp).sort((x,y)=>y.v-x.v).slice(0,15).map(c=>[`<span class="mono">${esc(c.c)}</span>`,srcL(c.s),String(c.o),brl(c.v)]),'Nenhuma venda com utm_campaign.')};
+function spendBy(u,a){const o={},ads=u.ads||{},M=MR(),cur=paidIn(a,M.m0,M.n);
+ if(ads.tiktok)o.tiktok=ads.tiktok.mode=='live'?(ads.tiktok.rep?ads.tiktok.rep.list.reduce((t,x)=>t+x.spend,0)*(CUR2BRL[ads.tiktok.adv&&ads.tiktok.adv.currency]||1):0):demoSpend(cur,'tiktok');
+ for(const k of ['meta','google','kwai'])if(ads[k]&&ads[k].mode=='demo')o[k]=demoSpend(cur,k);return o}
+const demoSpend=(cur,k)=>{const g={};cur.filter(x=>x.src==k).forEach(x=>g[x.cp]=(g[x.cp]||0)+x.a);return Object.entries(g).reduce((t,[c,v])=>t+v/roasOf(c),0)};
+const PRESET=[['Instagram bio','instagram','organic','bio'],['Stories','instagram','organic','stories'],['YouTube','youtube','organic','descricao'],['WhatsApp','whatsapp','organic','grupo'],['E-mail','email','organic','newsletter'],['TikTok Ads','tiktok','paid','__CAMPAIGN_NAME__'],['Meta Ads','facebook','paid','{{campaign.name}}'],['Google Ads','google','cpc','{campaignid}']];
+let PR=0;
+function trkCard(u){const p=u.trk.params,ps=PRESET[PR];return `<div class="g2h"><div class="card static"><div class="ch"><b>Parâmetros rastreados</b><small>gravados em cada Pix desta subconta</small></div><p class="sub" style="margin:6px 0">O checkout (ou sua chamada de API) repassa estes parâmetros da URL em <code>tracking</code>. A origem é classificada sozinha: <code>ttclid</code>/tiktok → TikTok, <code>fbclid</code>/facebook/instagram pago → Meta, <code>gclid</code> → Google, <code>utm_medium=organic</code> → Orgânico.</p>
+ <div class="chips">${p.map(x=>`<span class="pchip">${esc(x)}<button title="Remover" onclick="trkSet('${u.id}',${JSON.stringify(p.filter(y=>y!=x)).replace(/"/g,'&quot;')})">×</button></span>`).join('')}</div>
+ <div class="fm"><input id="tk_new" placeholder="Novo parâmetro (ex.: xcod, ref, afiliado)" style="max-width:280px"><button class="btn o" onclick="const v=$('#tk_new').value.trim();if(v)trkSet('${u.id}',[...${JSON.stringify(p).replace(/"/g,'&quot;')},v])">Adicionar</button></div><small class="err" id="tk_err"></small></div>
+ <div class="card static"><b>Gerador de link</b><div class="row"><span class="tgl">${PRESET.map((x,i)=>`<button class="${i==PR?'on':''}" onclick="PR=${i};render()">${x[0]}</button>`).join('')}</span></div>
+ <div class="fm"><input id="tl_u" value="https://sualoja.com/oferta" oninput="tlink()"></div><div class="fm"><input id="tl_s" value="${ps[1]}" oninput="tlink()" title="utm_source"><input id="tl_m" value="${ps[2]}" oninput="tlink()" title="utm_medium"><input id="tl_c" value="${esc(ps[3])}" oninput="tlink()" title="utm_campaign"></div><pre id="tl_o" style="white-space:pre-wrap;word-break:break-all"></pre><button class="btn sm o" onclick="copy($('#tl_o').dataset.v)">Copiar link</button></div></div>`}
+function tlink(){const o=$('#tl_o');if(!o)return;const u=$('#tl_u').value,q=new URLSearchParams({utm_source:$('#tl_s').value,utm_medium:$('#tl_m').value,utm_campaign:$('#tl_c').value});let s=u+(u.includes('?')?'&':'?')+q.toString().replace(/%7B/g,'{').replace(/%7D/g,'}');if($('#tl_s').value=='tiktok')s+='&ttclid=__CALLBACK_PARAM__';o.dataset.v=s;o.textContent=s}
+async function trkSet(u,params){try{await act('trkParams',{u,params},'#tk_err')}catch(e){}}
+
+function ttCard(u){const c=(u.ads||{}).tiktok,S=ST.srv,hd=(st,sub)=>`<div class="ph">${LG('tiktok',42)}<div><b>TikTok Ads</b><small>${sub}</small></div>${bd(st)}</div>`;
+ if(!c)return `<div class="card static ttc">${hd('Não conectado','Gasto, campanhas e Events API (servidor → TikTok)')}<p class="sub" style="margin:0">Cada Pix pago nesta subconta é enviado ao seu Pixel como CompletePayment, direto do servidor.</p><div class="opt2"><div class="opt"><b>Entrar com TikTok</b><p>Login oficial (OAuth).</p>${S.tiktokApp?`<button class="btn tt" onclick="act('ttAuthUrl',{u:'${u.id}'}).then(j=>location.href=j.url)">${LG('tiktok',18)} Entrar com TikTok</button>`:`<div class="note" style="margin:0">Crie um app em <b>business-api.tiktok.com/portal</b>, use o redirect <code>${esc(S.redirect)}</code> e coloque app_id e secret no <code>config.json</code>.</div>`}</div>
+  <div class="opt"><b>Token de acesso</b><p>Gerado no portal de desenvolvedor + ID do anunciante.</p><input class="in" id="tt_tok" type="password" placeholder="Access token" style="width:100%;margin-bottom:8px" autocomplete="off"><input class="in" id="tt_adv" placeholder="ID do anunciante" inputmode="numeric" style="width:100%;margin-bottom:8px"><button class="btn" id="tt_go" onclick="ttManual('${u.id}')">Conectar</button></div></div><small class="err" id="tte"></small>
+  <details style="margin-top:6px"><summary style="cursor:pointer;color:var(--mu);font-size:13px">Sem credenciais ainda? Modo demonstração</summary><div class="fm"><input id="tt_dadv" placeholder="ID do anunciante (10 a 19 números)"><input id="tt_px" placeholder="Código do Pixel (ex.: C4ABCD1234EFGH)"><button class="btn o" onclick="act('ttDemo',{u:'${u.id}',adv:$('#tt_dadv').value,px:$('#tt_px').value},'#tte').then(()=>toast('TikTok conectado (demonstração)'))">Conectar</button></div></details></div>`;
+ const live=c.mode=='live',cs=ttCamps(u,c),T=cs.reduce((t,x)=>({sp:t.sp+x.sp,imp:t.imp+x.imp,clk:t.clk+x.clk,s:t.s+x.s,v:t.v+x.v}),{sp:0,imp:0,clk:0,s:0,v:0});
+ const sub=live?(c.adv?`${esc(c.adv.name)} · ID ${esc(c.adv.id)} · ${esc(c.adv.currency)}`:'Carregando contas…'):`Anunciante ${esc(mask(c.adv.id))} · Pixel ${esc(c.px)}`;
+ const ctrl=live?`<div class="row">${(c.advs||[]).length>1?`<select class="sel" onchange="act('ttSet',{u:'${u.id}',k:'adv',v:this.value})">${c.advs.map(x=>`<option value="${esc(x.id)}" ${c.adv&&x.id==c.adv.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select>`:''}<select class="sel" onchange="act('ttSet',{u:'${u.id}',k:'px',v:this.value})">${(c.pxs||[]).length?c.pxs.map(p=>`<option value="${esc(p.code)}" ${p.code==c.px?'selected':''}>Pixel: ${esc(p.name)}</option>`).join(''):'<option value="">Nenhum Pixel encontrado</option>'}</select><input class="in" placeholder="Test event code (opcional)" value="${esc(c.tc||'')}" onchange="act('ttSet',{u:'${u.id}',k:'tc',v:this.value})" style="width:210px"></div>`:'';
+ return `<div class="card static ttc">${hd(live?(c.err?'Erro':'Conectado'):'Demonstração',sub)}${c.err?`<div class="note" style="color:var(--er)">${esc(c.err)}</div>`:''}${ctrl}
+ <div class="row"><button class="sw ${c.send?'on':''}" onclick="act('ttSet',{u:'${u.id}',k:'send',v:${!c.send}})" aria-label="Enviar Pix pagos ao TikTok"></button><span>Enviar cada Pix pago ao Pixel (CompletePayment, Events API)${c.tc?' · <b>modo teste</b>':''}</span></div>
+ <div class="mk"><div><small>Gasto${live?' (30 dias)':' (mês)'}</small><b>${brl(T.sp)}</b></div><div><small>Impressões</small><b>${nf(T.imp)}</b></div><div><small>Cliques</small><b>${nf(T.clk)}</b></div><div><small>Pix pagos</small><b>${T.s}</b></div><div><small>Comissão</small><b>${brl(T.v)}</b></div><div><small>ROAS</small><b>${T.sp?xr(T.v/T.sp):'—'}</b></div></div>
+ ${tbl(['Campanha','Status','Gasto','Impressões','Cliques','CPC','Pix pagos','Comissão','ROAS','CPA'],cs.map(x=>[esc(x.n),bd(x.st),brl(x.sp),nf(x.imp),nf(x.clk),x.clk?brl(x.sp/x.clk):'—',String(x.s),brl(x.v),x.sp?xr(x.v/x.sp):'—',x.s?brl(x.sp/x.s):'—']),c.busy?'<span class="spin"></span> Carregando campanhas…':'Nenhuma campanha.')}
+ <b style="font-size:13px">Eventos enviados</b>${logBox(c.log)}
+ <div class="row">${live?`<button class="btn o" onclick="act('ttSync',{u:'${u.id}'})" ${c.busy?'disabled':''}>${c.busy?'<span class="spin"></span> Atualizando':'Atualizar dados'}</button>`:''}<button class="btn o" onclick="act('ttTest',{u:'${u.id}'}).then(()=>toast('Evento de teste enviado'))">Enviar evento de teste</button><button class="btn er" onclick="if(confirm('Desconectar TikTok desta subconta?'))act('adOff',{u:'${u.id}',k:'tiktok'})">Desconectar</button>${live&&c.rep?`<small style="color:var(--mu)">atualizado ${ago(c.rep.ts)}</small>`:''}</div></div>`}
+function ttCamps(u,c){const M=MR(),a=paidIn(ST.sales.filter(x=>x.u==u.id&&x.src=='tiktok'),M.m0,M.n);
+ if(c.mode=='live'){const r=CUR2BRL[c.adv&&c.adv.currency]||1;return(c.rep?c.rep.list:[]).map(x=>{const sc=a.filter(s=>s.cp==slug(x.name)||s.cp==x.id);return{n:x.name,st:x.status,sp:x.spend*r,imp:x.imp,clk:x.clk,s:sc.length,v:sumN(sc)}})}
+ const g={};a.forEach(x=>{const o=g[x.cp]=g[x.cp]||{n:x.cp,st:'Ativo',a:0,s:0,v:0};o.a+=x.a;o.s++;o.v+=net(x)});return Object.values(g).map(o=>{const sp=o.a/roasOf(o.n),imp=Math.round(sp*(14+hs(o.n)%12)),clk=Math.round(imp*(.012+(hs(o.n)%13)/1000));return{...o,sp,imp,clk}})}
+const logBox=l=>`<div class="log">${(l||[]).length?l.map(x=>`<div><span class="t">${new Date(x.ts).toLocaleTimeString('pt-BR')}</span><span class="${x.ok?'ok-t':'er-t'}">${x.ok?'✓':'✕'}</span><span>${esc(x.t)}</span></div>`).join(''):'<span style="color:var(--mu)">Nenhum evento ainda.</span>'}</div>`;
+async function ttManual(u){const b=$('#tt_go');b.disabled=true;b.innerHTML='<span class="spin"></span> Validando';try{await act('ttManual',{u,tok:$('#tt_tok').value,adv:$('#tt_adv').value},'#tte');toast('TikTok Ads conectado')}catch(e){b.disabled=false;b.textContent='Conectar'}}
+function metaCard(u){const c=(u.ads||{}).meta,hd=st=>`<div class="ph">${LG('meta',38)}<div><b>Meta Ads</b><small>Conversions API (servidor → Meta)</small></div>${bd(st)}</div>`;
+ if(!c)return `<div class="card static">${hd('Não conectado')}<input class="in" id="mt_px" placeholder="ID do Pixel / Dataset" style="width:100%;margin-bottom:8px"><input class="in" id="mt_tok" type="password" placeholder="Token de acesso da CAPI (vazio = demonstração)" style="width:100%;margin-bottom:8px" autocomplete="off"><input class="in" id="mt_tc" placeholder="Test event code (opcional, ex.: TEST12345)" style="width:100%;margin-bottom:8px"><button class="btn" id="mt_go" onclick="metaOn('${u.id}')">Conectar Meta</button><small class="err" id="mte"></small></div>`;
+ return `<div class="card static">${hd(c.mode=='live'?'Conectado':'Demonstração')}<p class="sub" style="margin:0 0 6px">${esc(c.name)} · Pixel ${esc(c.px)}</p><div class="row"><button class="sw ${c.send?'on':''}" onclick="act('metaSetTc',{u:'${u.id}',k:'send',v:${!c.send}})"></button><span>Enviar Purchase a cada Pix pago</span></div>${c.mode=='live'?`<div class="row"><input class="in" placeholder="Test event code" value="${esc(c.tc||'')}" onchange="act('metaSetTc',{u:'${u.id}',k:'tc',v:this.value})" style="width:200px"></div>`:''}${logBox(c.log)}<div class="row"><button class="btn o sm" onclick="act('metaTest',{u:'${u.id}'}).then(()=>toast('Evento de teste enviado'))">Evento de teste</button><button class="btn er sm" onclick="act('adOff',{u:'${u.id}',k:'meta'})">Desconectar</button></div></div>`}
+async function metaOn(u){const b=$('#mt_go');b.disabled=true;try{await act('metaSet',{u,px:$('#mt_px').value,tok:$('#mt_tok').value,tc:$('#mt_tc').value},'#mte');toast('Meta conectado')}catch(e){b.disabled=false}}
+function demoCard(u,k,nm,lb){const c=(u.ads||{})[k],hd=st=>`<div class="ph">${LG(k,38)}<div><b>${nm}</b><small>Modo demonstração</small></div>${bd(st)}</div>`;
+ if(!c)return `<div class="card static">${hd('Não conectado')}<input class="in" id="${k}_a" placeholder="${lb[0]}" style="width:100%;margin-bottom:8px"><input class="in" id="${k}_b" placeholder="${lb[1]}" style="width:100%;margin-bottom:8px"><button class="btn o" onclick="act('adDemo',{u:'${u.id}',k:'${k}',a:$('#${k}_a').value,b:$('#${k}_b').value},'#${k}_e').then(()=>toast('${nm} conectado'))">Conectar ${nm}</button><small class="err" id="${k}_e"></small></div>`;
+ return `<div class="card static">${hd('Demonstração')}<p class="sub" style="margin:0 0 6px">Conta ${esc(mask(c.a))}</p>${logBox(c.log)}<button class="btn er sm" onclick="act('adOff',{u:'${u.id}',k:'${k}'})">Desconectar</button></div>`}
+
+/* ---- Saldo e saques (seller, por subconta) ---- */
+const W={amt:'',reg:'',bank:'',wt:'email',k:'',k2:'',rt:'',ac:'',ac2:''};
+const sbal=()=>selSub().bal;
+V.fin=()=>{const M=MR(),u=selSub(),all=mySales().filter(x=>x.st=='Pago'),po=ST.po.filter(p=>p.u==u.id),tot=sumN(all),dv=sumA(all.filter(lost)),out=po.filter(p=>p.st!='Recusado').reduce((t,p)=>t+p.a,0),cm=sumN(paidIn(all,M.m0,M.n)),wm=po.filter(p=>p.st!='Recusado'&&p.ts>=M.m0).reduce((t,p)=>t+p.a,0),pend=po.filter(p=>p.st=='Em análise'||p.st=='Processando');
+ const ext=[...all.slice(-40).map(x=>({ts:x.pt,t:'Pix pago · '+x.pr,v:net(x)})),...all.filter(lost).map(x=>({ts:x.dp.ts,t:'Disputa perdida '+x.dp.id,v:-x.a})),...po.map(p=>({ts:p.ts,t:'Saque '+p.id.slice(0,8)+' → '+p.x+(p.st=='Recusado'?' (recusado, estornado)':''),v:p.st=='Recusado'?0:-p.a}))].sort((a,b)=>b.ts-a.ts).slice(0,14);
+ return head('Saldo e saques','Saldo isolado da subconta '+esc(u.n))+kp([['Disponível para saque',u.bal,'subconta '+u.n,'m','','hl'],['Comissões no mês',cm,'Pix pagos em '+M.mn],['Sacado no mês',wm,'inclui saques em andamento'],['Em andamento',pend.reduce((t,p)=>t+p.a,0),pend.length?pend.length+' saque(s) '+(pend.some(p=>p.st=='Em análise')?'· aguardando aprovação':'processando'):'nenhum']])+
+ `<div class="g2e">${wCard()}<div class="card static"><b>Como o saldo é calculado</b><div class="sum"><div><span>Comissões de todos os Pix pagos</span><b>${brl(tot)}</b></div><div><span>− Devoluções de disputas perdidas</span><b>${brl(dv)}</b></div><div><span>− Saques (pagos, em análise e processando)</span><b>${brl(out)}</b></div><div class="tot"><span>= Disponível para saque</span><b class="ok">${brl(RS(tot-dv-out))}</b></div></div><p class="sub" style="font-size:12.5px;margin:10px 0 0">Saque recusado volta para o saldo na hora. ${me().auto?'Seus saques saem automaticamente.':'Seus saques passam por aprovação antes de sair.'} Saldo total somando todas as subcontas: <b>${brl(me().bal)}</b>.</p></div></div>`+
+ `<h3>Saques</h3>`+tbl(['Saque','Destino','Valor','Recebe','Quando','Status'],po.slice(0,30).map(p=>[`<span class="mono">${p.id.slice(0,10)}</span>`,`<span class="src">${bl(bankOf(p.dest&&p.dest.bank))}${esc(p.x)}</span>`,brl(p.a),esc(p.rc),dt(p.ts),bd(p.st)]),'Nenhum saque nesta subconta.')+
+ `<h3>Extrato recente</h3>`+tbl(['Descrição','Valor','Quando'],ext.map(e=>[esc(e.t),`<span class="mono ${e.v<0?'er-t':'ok-t'}">${e.v<0?'−':'+'} ${brl(Math.abs(e.v))}</span>`,dt(e.ts)]))};
+function wCard(){const b=W.reg?BANKS[W.reg]:[],d=me().dest||[];return `<div class="card static" id="wcard"><div class="ch"><b>Novo saque</b><small>sai do saldo de ${esc(selSub().n)}</small></div>
+ ${d.length?`<label class="lb">Destinos salvos</label><div class="chips">${d.map((x,i)=>`<button class="chip" onclick="wuse(${i})">${bl(bankOf(x.bank))}${esc(x.label)}</button>`).join('')}</div>`:''}
+ <label class="lb">1. Quanto você quer sacar?</label><div class="fm"><input id="wa" type="number" min="1" step="0.01" placeholder="R$ 0,00" value="${esc(W.amt)}" oninput="wset('amt',this.value)"><button class="btn o" onclick="wmax()">Máx.</button></div>
+ <label class="lb">2. Seu banco é do Brasil ou de fora?</label>
+ <div class="seg2"><button class="rg ${W.reg=='br'?'on':''}" onclick="wreg('br')">${ico(I.pix,22)}<b>Banco no Brasil</b><small>Pix · XP, Nubank, NG Cash, Inter, Itaú</small></button><button class="rg ${W.reg=='intl'?'on':''}" onclick="wreg('intl')">${ico(I.glob,22)}<b>Conta internacional</b><small>Wise ou Inter Global, em moeda forte</small></button></div>
+ ${W.reg?`<label class="lb">3. Qual banco?</label><div class="banks">${b.map(x=>`<button class="bank ${W.bank==x[0]?'on':''}" onclick="wbank('${x[0]}')">${bl(x)}<span>${x[0]}</span></button>`).join('')}</div>`:''}
+ ${W.bank?keyF():''}<div class="sum" id="wsum"></div><button class="btn big" onclick="withdraw()">Confirmar saque</button><small class="err" id="we"></small></div>`}
+const inp=(f,ph,ex='')=>`<input class="in" style="width:100%;margin-bottom:8px" placeholder="${ph}" value="${esc(W[f])}" oninput="wset('${f}',this.value)" ${ex}>`;
+function keyF(){if(W.reg=='br')return `<label class="lb">4. Sua chave Pix no ${esc(W.bank)}</label>${inp('k','CPF, CNPJ, e-mail, celular ou chave aleatória')}${inp('k2','Confirme a chave Pix (digite de novo)','onpaste="return false" autocomplete="off"')}<small class="hint" id="wkh"></small>`;
+ if(W.bank=='Wise')return `<label class="lb">4. Para onde enviar na sua Wise?</label><span class="tgl">${[['email','E-mail Wise (US$)'],['iban','IBAN (€)']].map(([k,l])=>`<button class="${W.wt==k?'on':''}" onclick="W.wt='${k}';W.k=W.k2='';render()">${l}</button>`).join('')}</span><div style="margin-top:10px">${W.wt=='email'?inp('k','E-mail cadastrado na Wise')+inp('k2','Confirme o e-mail','onpaste="return false" autocomplete="off"'):inp('k','IBAN')+inp('k2','Confirme o IBAN','onpaste="return false" autocomplete="off"')}</div><small class="hint" id="wkh"></small>`;
+ return `<label class="lb">4. Conta Global Inter (EUA, US$)</label>${inp('rt','Routing number (ABA, 9 dígitos)','inputmode="numeric"')}${inp('ac','Número da conta','inputmode="numeric"')}${inp('ac2','Confirme o número da conta','inputmode="numeric" onpaste="return false" autocomplete="off"')}<small class="hint" id="wkh"></small>`}
+const cpfOk=d=>{if(!/^\d{11}$/.test(d)||/^(\d)\1+$/.test(d))return false;const v=n=>{let s=0;for(let i=0;i<n;i++)s+=+d[i]*(n+1-i);return s*10%11%10==+d[n]};return v(9)&&v(10)};
+const cnpjOk=d=>{if(!/^\d{14}$/.test(d)||/^(\d)\1+$/.test(d))return false;const v=n=>{const w=n==12?[5,4,3,2,9,8,7,6,5,4,3,2]:[6,5,4,3,2,9,8,7,6,5,4,3,2];const s=w.reduce((t,x,i)=>t+x*d[i],0)%11;return(s<2?0:11-s)==+d[n]};return v(12)&&v(13)};
+function pixT(k){k=String(k||'').trim();const d=k.replace(/\D/g,'');if(/^\S+@\S+\.\S{2,}$/.test(k))return['email','E-mail',k.toLowerCase()];if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k))return['evp','Chave aleatória',k.toLowerCase()];
+ if(/^[\d.\-\/\s()+]+$/.test(k)){if(d.length==14&&cnpjOk(d))return['cnpj','CNPJ',d];if(d.length==11&&cpfOk(d)&&!k.startsWith('+'))return['cpf','CPF',d];const t=d.startsWith('55')&&d.length>=12?d.slice(2):d;if(/^[1-9]{2}9\d{8}$/.test(t))return['tel','Celular','+55'+t]}return null}
+function ibanOk(s){s=s.replace(/\s/g,'').toUpperCase();if(!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(s))return false;const r=(s.slice(4)+s.slice(0,4)).replace(/[A-Z]/g,c=>c.charCodeAt(0)-55);let m=0;for(const ch of r)m=(m*10+ +ch)%97;return m==1}
+const abaOk=s=>{if(!/^\d{9}$/.test(s))return false;const d=[...s].map(Number);return(3*(d[0]+d[3]+d[6])+7*(d[1]+d[4]+d[7])+(d[2]+d[5]+d[8]))%10==0};
+const emailOk=s=>/^\S+@\S+\.\S{2,}$/.test(s.trim());
+function keyHint(){if(!W.bank)return['',0];
+ if(W.reg=='br'){if(!W.k)return['',0];const t=pixT(W.k);if(!t)return['Chave Pix inválida. Use CPF, CNPJ, e-mail, celular com DDD ou chave aleatória.',-1];if(!W.k2)return[t[1]+' detectado ✓ — agora confirme a chave',0];const t2=pixT(W.k2);return t2&&t2[2]==t[2]?[t[1]+' confirmado ✓ — as chaves conferem',1]:['As chaves Pix não conferem.',-1]}
+ if(W.bank=='Wise'){if(!W.k)return['',0];const ok=W.wt=='email'?emailOk(W.k):ibanOk(W.k);if(!ok)return[W.wt=='email'?'E-mail inválido.':'IBAN inválido.',-1];if(!W.k2)return['Válido ✓ — agora confirme',0];const n=x=>x.replace(/\s/g,'').toLowerCase();return n(W.k)==n(W.k2)?['Confirmado ✓ — os dados conferem',1]:['A confirmação não confere.',-1]}
+ if(!W.rt&&!W.ac)return['',0];if(!abaOk(W.rt.trim()))return['Routing number inválido (9 dígitos ABA).',-1];if(!/^\d{6,17}$/.test(W.ac.trim()))return['Conta deve ter de 6 a 17 dígitos.',-1];if(!W.ac2)return['Routing válido ✓ — agora confirme a conta',0];return W.ac.trim()==W.ac2.trim()?['Confirmado ✓ — os dados conferem',1]:['Os números da conta não conferem.',-1]}
+function wcalc(){const a=RS(parseFloat(W.amt)),ok=a>0;let rc='—',rate='—';if(ok&&W.reg=='br'){rc=brl(a);rate='sem conversão'}else if(ok&&W.reg=='intl'){const usd=a/USD_BRL*(1-SPREAD);rate=`US$ 1 = ${brl(USD_BRL/(1-SPREAD))} (spread 0,8%)`;rc=W.bank=='Wise'&&W.wt=='iban'?'€ '+(usd*.92).toFixed(2):'US$ '+usd.toFixed(2)}return{a,ok,rc,rate,after:RS(sbal()-(ok?a:0))}}
+function wprev(){const el=$('#wsum');if(!el)return;const q=wcalc();el.innerHTML=`<div><span>Disponível em ${esc(selSub().n)}</span><b>${brl(sbal())}</b></div><div><span>Valor do saque</span><b>${q.ok?'− '+brl(q.a):'—'}</b></div><div><span>Câmbio</span><b>${q.rate}</b></div><div><span>Você recebe${W.bank?' no '+esc(W.bank):''}</span><b class="ok">${q.rc}</b></div><div class="tot"><span>Saldo após o saque</span><b class="${q.after<0?'er':''}">${brl(q.after)}</b></div>`;
+ const h=$('#wkh');if(h){const[m,s]=keyHint();h.textContent=m;h.className='hint'+(s>0?' ok':s<0?' er':'')}$('#we').textContent=q.after<0?'Saldo insuficiente.':''}
+function wset(f,v,re){W[f]=v;re?render():wprev()}
+function wreg(r){if(W.reg!=r){W.reg=r;W.bank='';W.k=W.k2=W.rt=W.ac=W.ac2=''}render()}
+function wbank(b){if(W.bank!=b){W.bank=b;W.k=W.k2=W.rt=W.ac=W.ac2='';W.wt='email'}render();setTimeout(()=>{const i=document.querySelector('#wcard .in');if(i)i.focus()},30)}
+function wmax(){W.amt=sbal().toFixed(2);$('#wa').value=W.amt;wprev()}
+function wuse(i){const d=me().dest[i];Object.assign(W,{reg:d.reg,bank:d.bank,wt:d.wt||'email',k:d.k||'',k2:d.k||'',rt:d.rt||'',ac:d.ac||'',ac2:d.ac||''});if(!BANKS[d.reg].some(b=>b[0]==d.bank))W.bank=BANKS.br[1][0];render()}
+async function withdraw(){const q=wcalc();let e='';if(!q.ok)e='Informe um valor.';else if(q.after<0)e='Saldo insuficiente.';else if(!W.reg)e='Escolha se o banco é do Brasil ou de fora.';else if(!W.bank)e='Escolha o banco.';else{const[m,s]=keyHint();if(s<1)e=m&&s<0?m:'Preencha e confirme os dados de recebimento.'}
+ if(e){$('#we').textContent=e;const c=$('#wcard');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return}
+ try{const j=await act('payout',{u:selSub().id,a:q.a,dest:{reg:W.reg,bank:W.bank,wt:W.wt,k:W.k,rt:W.rt,ac:W.ac}},'#we');const p=ST.po.find(x=>x.id==j.id);W.amt='';render();toast(`Saque de <b>${brl(q.a)}</b> ${p&&p.st=='Em análise'?'enviado para aprovação':'em processamento'}`,'wa')}catch(err){}}
+function pop(p){const d=document.createElement('div');d.className='ov';const cols=['var(--pr)','var(--ac)','var(--ok)','var(--wa)','#F472B6','#fff'],u=me().subs.find(x=>x.id==p.u)||selSub();
+ const cf=Array.from({length:56},(_,i)=>`<i style="--x:${Math.round((Math.random()*2-1)*260)}px;--y:${-Math.round(80+Math.random()*200)}px;--r:${Math.round(Math.random()*900-450)}deg;--c:${cols[i%6]};--t:${(1.1+Math.random()*.8).toFixed(2)}s;--dl:${(.35+Math.random()*.2).toFixed(2)}s"></i>`).join('');
+ d.innerHTML=`<div class="pp" role="dialog" aria-modal="true" aria-label="Saque concluído"><div class="cf">${cf}</div><svg class="chk" viewBox="0 0 52 52" width="88" height="88"><circle cx="26" cy="26" r="24" fill="none" stroke="var(--ok)" stroke-width="3" class="pc"/><path d="M14 27l8 8 16-17" fill="none" stroke="var(--ok)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="pk"/></svg><h2>Saque concluído!</h2><div class="pv">${esc(p.rc)}</div><p>caiu em <b>${esc(p.x)}</b></p><dl class="pd"><div><dt>Subconta</dt><dd>${esc(u.n)}</dd></div><div><dt>Debitado do saldo</dt><dd>${brl(p.a)}</dd></div><div><dt>Saldo disponível</dt><dd>${brl(u.bal)}</dd></div></dl><button class="btn" data-x>Fechar</button><button class="btn o" data-x data-go>Ver extrato</button></div>`;
+ d.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(e.target===d||b){d.classList.add('out');setTimeout(()=>d.remove(),250);if(b&&b.hasAttribute('data-go')){if(p.u)P['sf_'+me().id]=p.u;location.hash='fin';render()}}});document.body.appendChild(d)}
+
+/* ---- API Pix (seller) ---- */
+let TESTPIX=null;
+V.api=()=>{const u=selSub(),keys=(me().keys||[]).filter(k=>k.u==u.id);return head('API Pix',`Credenciais e webhook da subconta ${esc(u.n)}`,subPicker())+
+ `<div class="g2h"><div class="card static"><div class="ch"><b>Credenciais</b><button class="btn sm" onclick="newKey('${u.id}')">${ico(I.plus,14)} Gerar credencial</button></div>${keys.length?keys.map(k=>`<div class="row" style="justify-content:space-between;border-bottom:1px dashed var(--bd);padding-bottom:8px"><div><span class="mono">${k.cid}</span><br><small style="color:var(--mu)">criada ${dt(k.ts)} · ${k.last?'último uso '+ago(k.last):'nunca usada'}</small></div><button class="btn sm er" onclick="if(confirm('Revogar esta credencial? Integrações que usam ela vão parar.'))act('keyRevoke',{id:'${k.id}'})">Revogar</button></div>`).join(''):'<p class="sub">Nenhuma credencial. Gere uma para integrar seu checkout.</p>'}
+ <b style="display:block;margin-top:14px">Webhook</b><div class="fm"><input id="wh_u" placeholder="https://seusite.com/webhooks/norevia" value="${esc(u.wh||'')}"><button class="btn o" onclick="act('webhook',{u:'${u.id}',url:$('#wh_u').value},'#wh_e').then(()=>toast('Webhook salvo'))">Salvar</button>${u.wh?`<button class="btn o" onclick="act('webhookTest',{u:'${u.id}'}).then(()=>toast('Ping enviado'))">Testar</button>`:''}</div><small class="err" id="wh_e"></small>
+ <small style="color:var(--mu)">Segredo de assinatura</small><div class="row"><code class="mono" id="whs">${esc(mask(u.whsec))}</code><button class="btn sm o" onclick="$('#whs').textContent='${esc(u.whsec)}'">Mostrar</button><button class="btn sm o" onclick="if(confirm('Gerar novo segredo?'))act('whRotate',{u:'${u.id}'})">Trocar</button></div>
+ <b style="font-size:13px">Entregas recentes</b><div class="log">${(u.whlog||[]).length?u.whlog.map(x=>`<div><span class="t">${new Date(x.ts).toLocaleTimeString('pt-BR')}</span><span class="${x.ok?'ok-t':'er-t'}">${x.ok?'✓':'✕'} ${x.code||''}</span><span>${esc(x.event)}${x.err?' — '+esc(x.err):''}</span></div>`).join(''):'<span style="color:var(--mu)">Nenhuma entrega ainda.</span>'}</div></div>
+ <div class="card static"><b>Gerar Pix de teste</b><p class="sub" style="margin:4px 0 0">Usa o mesmo motor da API. Cai como venda nesta subconta.</p><div class="fm"><input id="tp_a" type="number" min="1" step="0.01" value="97.00" style="max-width:130px"><input id="tp_d" value="Pix de teste"><button class="btn" onclick="testPix('${u.id}')">Gerar Pix</button></div><small class="err" id="tp_e"></small><div id="tp_o">${TESTPIX&&TESTPIX.subaccount.id==u.id?testOut():''}</div></div></div>
+ <h3>Documentação</h3>`+docs()};
+async function newKey(u){try{const j=await act('keyCreate',{u});modal(`<h2 style="margin-top:0">Credencial gerada</h2><p>Copie o <b>client_secret</b> agora — ele não é mostrado de novo.</p><dl class="pd"><div><dt>client_id</dt><dd>${j.cid}</dd></div><div><dt>client_secret</dt><dd style="word-break:break-all">${j.secret}</dd></div></dl><button class="btn" onclick="copy('${j.cid}:${j.secret}')">Copiar client_id:client_secret</button><button class="btn o" data-x>Fechar</button>`)}catch(e){}}
+async function testPix(u){try{const j=await act('pixTest',{u,a:$('#tp_a').value,d:$('#tp_d').value},'#tp_e');TESTPIX=j.charge;render()}catch(e){}}
+function testOut(){const c=TESTPIX,x=ST.sales.find(s=>s.id==c.id),st=x?x.st:'Pendente';let qr='';try{if(window.qrcode){const q=qrcode(0,'M');q.addData(c.brcode);q.make();qr=`<div class="qr">${q.createSvgTag({cellSize:4,margin:2,scalable:true})}</div>`}}catch(e){}
+ return `<div class="row" style="align-items:flex-start;gap:16px;margin-top:10px">${qr}<div style="flex:1;min-width:200px"><div class="row">${bd(st)}<b>${brl(c.amount/100)}</b><span class="chiph">comissão ${brl(c.net/100)}</span></div><small style="color:var(--mu)">Pix copia e cola</small><div class="brc">${esc(c.brcode)}</div><button class="btn sm o" onclick="copy(TESTPIX.brcode)">Copiar código</button>${st=='Pendente'?`<button class="btn sm ok" onclick="act('pixPay',{id:'${c.id}'})">Simular pagamento</button>`:''}</div></div><p class="sub" style="font-size:12px">Ambiente de testes: o código segue o padrão EMV do Pix, mas só fica pagável por apps de banco depois que a Norevia estiver ligada ao SPI (direto ou por um liquidante).</p>`}
+
+/* ---- Documentação ---- */
+function docs(){const B=ST.srv.base,pre=s=>`<pre><button class="cp" onclick="copy(this.parentElement.innerText.replace(/^Copiar\\n?/,''))">Copiar</button>${esc(s)}</pre>`,ep=(m,p)=>`<div class="ep"><i class="${m.toLowerCase()}">${m}</i>${p}</div>`;
+ const T=[['visao','Visão geral'],['auth','Autenticação'],['criar','Criar cobrança Pix'],['consultar','Consultar e listar'],['simular','Simular pagamento'],['saldo','Saldo'],['saques','Saques'],['webhooks','Webhooks'],['tracking','Rastreamento'],['erros','Erros']];
+ return `<div class="doc"><div class="toc">${T.map(([i,n])=>`<a href="javascript:void(0)" onclick="document.getElementById('d_${i}').scrollIntoView({behavior:'smooth'})">${n}</a>`).join('')}</div><div class="card static">
+ <h2 id="d_visao">Visão geral</h2><p>API REST da Norevia para gerar e acompanhar cobranças Pix com o nosso motor de pagamentos. Base URL:</p>${pre(B+'/v1')}<p>Valores sempre em <b>centavos</b> (inteiro): <code>9700</code> = R$ 97,00. Datas em ISO 8601 UTC. Cada credencial pertence a <b>uma subconta</b> — a cobrança cai na operação dessa subconta.</p>
+ <h2 id="d_auth">Autenticação (OAuth 2.0 client credentials)</h2>${ep('POST','/v1/oauth/token')}<p>Envie <code>client_id:client_secret</code> em Basic Auth. O token vale 1 hora.</p>${pre(`curl -X POST ${B}/v1/oauth/token \\\n  -u "CLIENT_ID:CLIENT_SECRET" \\\n  -H "Content-Type: application/json" \\\n  -d '{"grant_type":"client_credentials"}'`)}${pre(`{\n  "access_token": "at_9f2c...",\n  "token_type": "Bearer",\n  "expires_in": 3600,\n  "scope": "charges payouts balance"\n}`)}<p>Use nas próximas chamadas: <code>Authorization: Bearer &lt;access_token&gt;</code></p>
+ <h2 id="d_criar">Criar cobrança Pix</h2>${ep('POST','/v1/pix/charges')}<p>Campos: <code>amount</code> (obrigatório, centavos), <code>description</code>, <code>external_id</code> (seu pedido), <code>expires_in</code> (segundos, 60–86400, padrão 3600), <code>tracking</code> (parâmetros da URL), <code>payer</code> (<code>name</code>, <code>email</code>, <code>document</code> — usado pelo antifraude e pelos pixels). Header opcional <code>Idempotency-Key</code> evita cobrança duplicada.</p>${pre(`curl -X POST ${B}/v1/pix/charges \\\n  -H "Authorization: Bearer $TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -H "Idempotency-Key: pedido-1234" \\\n  -d '{\n    "amount": 9700,\n    "description": "Curso Pro",\n    "external_id": "pedido-1234",\n    "tracking": { "utm_source": "tiktok", "utm_campaign": "ugc-01", "ttclid": "E.C.P.abc" }\n  }'`)}${pre(`{\n  "id": "px_7k2a9f3c1",\n  "txid": "a81f0c...",\n  "status": "pending",\n  "amount": 9700,\n  "fee": 584,\n  "net": 9116,\n  "description": "Curso Pro",\n  "external_id": "pedido-1234",\n  "subaccount": { "id": "sub_...", "name": "Drop Brasil" },\n  "brcode": "00020101021226...6304ABCD",\n  "expires_at": "2026-11-16T15:00:00.000Z",\n  "paid_at": null,\n  "tracking": { "utm_source": "tiktok", ... }\n}`)}<p>Mostre o <code>brcode</code> como QR Code e como “Pix copia e cola”. <code>net</code> é a sua comissão (valor − taxa).</p>
+ <h2 id="d_consultar">Consultar e listar</h2>${ep('GET','/v1/pix/charges/{id}')}${ep('GET','/v1/pix/charges?status=paid&limit=20')}${pre(`curl ${B}/v1/pix/charges/px_7k2a9f3c1 -H "Authorization: Bearer $TOKEN"`)}<p>Status: <code>pending</code>, <code>paid</code>, <code>expired</code>, <code>blocked</code> (barrada pelo antifraude da subconta).</p>
+ <h2 id="d_simular">Simular pagamento (testes)</h2>${ep('POST','/v1/pix/charges/{id}/simulate-payment')}<p>Marca a cobrança como paga, credita a comissão e dispara webhook + pixels — igual a um pagamento real.</p>${pre(`curl -X POST ${B}/v1/pix/charges/px_7k2a9f3c1/simulate-payment -H "Authorization: Bearer $TOKEN"`)}
+ <h2 id="d_saldo">Saldo</h2>${ep('GET','/v1/balance')}${pre(`{ "available": 291659, "currency": "BRL" }`)}
+ <h2 id="d_saques">Saques</h2>${ep('POST','/v1/payouts')}${ep('GET','/v1/payouts/{id}')}<p>Envia Pix do seu saldo. Se a sua conta exige aprovação, o status começa em <code>under_review</code>; senão <code>processing</code> e depois <code>paid</code>.</p>${pre(`curl -X POST ${B}/v1/payouts \\\n  -H "Authorization: Bearer $TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -d '{ "amount": 50000, "pix_key": "voce@email.com" }'`)}
+ <h2 id="d_webhooks">Webhooks</h2><p>Cadastre a URL por subconta (acima). Eventos: <code>charge.paid</code>, <code>charge.expired</code>, <code>payout.paid</code>, <code>ping</code>. Cada POST traz <code>X-Bluvia-Event</code> e <code>X-Bluvia-Signature: sha256=&lt;HMAC do corpo com seu segredo&gt;</code>.</p>${pre(`// Node.js — validar assinatura\nconst crypto = require('crypto');\nfunction valido(rawBody, header, segredo) {\n  const esperado = 'sha256=' + crypto.createHmac('sha256', segredo).update(rawBody).digest('hex');\n  return crypto.timingSafeEqual(Buffer.from(header), Buffer.from(esperado));\n}`)}${pre(`{\n  "id": "evt_3c9a...",\n  "event": "charge.paid",\n  "created_at": "2026-11-16T14:02:11.000Z",\n  "data": { "id": "px_7k2a9f3c1", "status": "paid", "amount": 9700, "net": 9116, ... }\n}`)}
+ <h2 id="d_tracking">Rastreamento</h2><p>Repasse em <code>tracking</code> os parâmetros que chegaram na URL do seu checkout (<code>utm_*</code>, <code>src</code>, <code>sck</code>, <code>ttclid</code>, <code>fbclid</code>, <code>gclid</code> e os personalizados da subconta). A Norevia classifica a origem e, quando o Pix é pago, envia a compra para TikTok (Events API) e Meta (Conversions API) conectados na subconta — do servidor, sem depender do navegador do comprador.</p>
+ <h2 id="d_erros">Erros</h2><p>Formato: <code>{"error":{"code":"...","message":"..."}}</code></p>${tbl(['HTTP','code','Quando'],[['401','invalid_client / invalid_token','credencial ou token inválido/expirado'],['403','seller_blocked','conta bloqueada'],['404','not_found','recurso não existe ou é de outra conta'],['409','not_pending','cobrança já paga/expirada'],['422','invalid_amount / invalid_pix_key / insufficient_balance','dados inválidos'],['422','blocked_by_antifraud','regra de antifraude da subconta barrou o pagamento']].map(r=>r.map(c=>`<span class="${c.length<5?'mono':''}">${esc(c)}</span>`)))}
+ </div></div>`}
+V.docs=()=>head('Documentação da API Pix','O que os sellers usam para integrar')+docs();
+
+/* ================= shell ================= */
+/* ================= GERENTE ================= */
+const G=()=>ST.mgr,refUrl=()=>ST.srv.base+'/cadastro/'+G().code;
+const shareTxt=()=>pct(G().share,0)+' do lucro'+(G().share2?` + ${pct(G().share2,0)} nos indiretos`:'');
+function netStats(){const M=MR(),t0=dayStart(M.n),f30=M.n-30*DAY;return ST.net.map(n=>{const a=ST.sales.filter(x=>x.s==n.id),p30=a.filter(x=>x.st=='Pago'&&x.pt>=f30),g30=a.filter(x=>x.ts>=f30&&(x.st=='Pago'||x.st=='Expirado')),pm=a.filter(x=>x.st=='Pago'&&x.pt>=M.m0);return{...n,fat:sumA(p30),vendas:p30.length,gen:g30.length,conv:g30.length?p30.length/g30.length:null,cm30:p30.reduce((t,x)=>t+x.cm,0),hoje:a.filter(x=>x.st=='Pago'&&x.pt>=t0).length,tpvM:sumA(pm),cmM:pm.reduce((t,x)=>t+x.cm,0)}})}
+// gráfico de área suave
+function area(v,l,f){const W=1000,H=230,P=40,mx=Math.max(...v,1e-9)*1.15,X=i=>P+i*(W-P-10)/Math.max(v.length-1,1),Y=x=>H-22-(x/mx)*(H-40),pts=v.map((x,i)=>[X(i),Y(x)]);
+ let d=`M${pts[0][0]},${pts[0][1]}`;for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;d+=` C${p1[0]+(p2[0]-p0[0])/6},${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6},${p2[1]-(p3[1]-p1[1])/6} ${p2[0]},${p2[1]}`}
+ const g=[0,.25,.5,.75,1].map(k=>`<path d="M${P} ${Y(mx/1.15*k)}H${W}" stroke="var(--bd)" stroke-dasharray="4 6"/><text x="${P-6}" y="${Y(mx/1.15*k)+4}" text-anchor="end" font-size="11" fill="var(--mu)">${f(mx/1.15*k)}</text>`).join('');
+ const every=Math.ceil(v.length/8);
+ return `<svg class="area" viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="none" style="height:${H}px"><defs><linearGradient id="ag" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--pr)" stop-opacity=".45"/><stop offset="1" stop-color="var(--pr)" stop-opacity="0"/></linearGradient></defs>${g}<path d="${d} L${pts[pts.length-1][0]},${H-22} L${pts[0][0]},${H-22}Z" fill="url(#ag)"/><path class="ln" d="${d}" fill="none" stroke="var(--ac)" stroke-width="2.5"/>${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--ac)" class="dot"><title>${l[i]}: ${f(v[i])}</title></circle>${i%every==0||i==v.length-1?`<text x="${p[0]}" y="${H-4}" text-anchor="middle" font-size="11" fill="var(--mu)">${l[i]}</text>`:''}`).join('')}</svg>`}
+let GPER=7,GF='todos';
+V.g_home=()=>{const g=G(),ns=netStats(),idle=ns.filter(n=>n.st=='Ativo'&&!n.hoje),M=MR(),from=dayStart(M.n)-(GPER-1)*DAY,dv=daily(ST.sales.filter(x=>x.cm),from,GPER,x=>x.cm),dl=Array.from({length:GPER},(_,i)=>new Date(from+i*DAY).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}));
+ const top=[...ns].sort((a,b)=>b.tpvM-a.tpvM).slice(0,5);
+ return `<div class="eyebrow">Gerente de contas</div><h1>Painel</h1><p class="sub">${esc(g.n)} · sua fatia: ${shareTxt()}</p>`+
+ (idle.length?`<div class="alertb">${ico(I.alert,18)}<span><b>${idle.length} player${idle.length>1?'s':''} da sua rede não rodaram hoje.</b> Vale chamar pra entender o que aconteceu.</span><a href="#g_rede" onclick="GF='idle'">Ver quem →</a></div>`:`<div class="alertb ok">${ico(I.pix,18)}<span><b>Toda a sua rede já vendeu hoje.</b> Bom trabalho.</span></div>`)+
+ `<div class="g2h"><div class="card hlc"><small>Seu saldo de comissões</small><div class="big" data-k="m" data-v="${g.bal}">${brl(g.bal)}</div><div class="split"><div><small>% Comissões recebidas</small><b class="mono">${brl(g.earn)}</b></div><div><small>Sua fatia</small><b>${shareTxt()}</b></div></div><a class="btn big" href="#g_wallet" style="margin-top:14px">Ver carteira →</a></div>
+ <div class="card"><div class="ch"><span class="src">${ico(I.w,18)} Total transferido</span><span class="b ok">Para sua conta de seller</span></div><div class="big">${brl(g.out)}</div><p class="sub" style="margin:0 0 10px">${ST.mt.length} transferência(s) · disponível agora ${brl(g.bal)}</p><a href="#g_wallet" style="font-weight:600">Transferir e ver o histórico</a><p class="sub" style="font-size:12px;margin:8px 0 0">O saque é feito pela sua conta, no modo Seller.</p></div></div>`+
+ `<div class="card"><div class="ch"><div><b>Minhas comissões</b><br><small>Últimos ${GPER} dias</small></div><span class="tgl">${[7,14,30].map(d=>`<button class="${d==GPER?'on':''}" onclick="GPER=${d};render()">${d} dias</button>`).join('')}</span></div><small style="margin-top:10px;letter-spacing:.08em;text-transform:uppercase">Total no período</small><div style="font:700 24px 'JetBrains Mono',monospace;margin-bottom:6px">${brl(dv.reduce((a,b)=>a+b,0))}</div>${area(dv,dl,x=>brl(x))}</div>`+
+ kp([['TPV da rede no mês',ns.reduce((t,n)=>t+n.tpvM,0),ns.length+' players'],['Comissão no mês',ns.reduce((t,n)=>t+n.cmM,0),'sua parte do lucro'],['Rodaram hoje',ns.filter(n=>n.hoje).length,'de '+ns.filter(n=>n.st=='Ativo').length+' ativos','i']])+
+ `<h3>Top players do mês</h3>`+tbl(['#','Player','TPV no mês','Sua comissão'],top.map((n,i)=>[medal(i),`<b>${esc(n.n)}</b>`,brl(n.tpvM),`<span class="ok-t">${brl(n.cmM)}</span>`]),'Sua rede ainda não vendeu este mês.')};
+const medal=i=>i<3?`<span class="medal m${i}">${i+1}</span>`:`<span class="medal">${i+1}</span>`;
+
+V.g_links=()=>{const g=G(),u=refUrl(),dir=ST.net.filter(n=>n.lvl==1).sort((a,b)=>b.ts-a.ts);let qr='';try{if(window.qrcode){const q=qrcode(0,'M');q.addData(u);q.make();qr=`<div class="qr">${q.createSvgTag({cellSize:4,margin:2,scalable:true})}</div>`}}catch(e){}
+ return `<div class="eyebrow">Gerente de contas</div><h1>Meus links</h1><p class="sub">Quem se cadastra pelo seu link entra direto na sua rede</p>`+
+ `<div class="card static"><div class="row" style="align-items:flex-start;gap:18px">${qr}<div style="flex:1;min-width:240px"><b>Seu link de indicação</b><div class="brc" style="font-size:13px">${esc(u)}</div><div class="row"><button class="btn" onclick="copy('${u}')">Copiar link</button><a class="btn o" href="${u}" target="_blank" rel="noopener">Abrir página de cadastro</a></div><p class="sub" style="margin:10px 0 0">Você ganha <b style="color:var(--tx)">${shareTxt()}</b> da Bluvia em cada venda dos players indicados. Lucro = taxa cobrada do seller − custo de processar a venda.</p></div></div></div>`+
+ kp([['Indicados diretos',dir.length,'cadastrados pelo seu link ou pelo CEO','i'],['Cadastros nos últimos 30 dias',dir.filter(n=>n.ts>Date.now()-30*DAY).length,'','i']])+
+ `<h3>Últimos cadastros</h3>`+tbl(['Player','E-mail','Cadastro','Status'],dir.slice(0,15).map(n=>[`<b>${esc(n.n)}</b>`,esc(n.email),dt(n.ts),bd(n.st)]),'Ninguém se cadastrou ainda. Compartilhe seu link.')};
+
+V.g_rede=()=>{const ns=netStats(),dir=ns.filter(n=>n.lvl==1),ind=ns.filter(n=>n.lvl==2),show=n=>GF!='idle'||(n.st=='Ativo'&&!n.hoje);
+ const row=n=>`<div class="nrow ${n.lvl==2?'ind':''}" data-q="${esc((n.n+' '+n.email).toLowerCase())}" ${show(n)?'':'hidden'}><span class="av">${esc(n.n[0])}</span><div class="nm"><b>${esc(n.n)}</b>${n.mgr?' <span class="b ac">gerente</span>':''}${n.st!='Ativo'?' '+bd(n.st):''}${n.st=='Ativo'&&!n.hoje?' <span class="b wa">não rodou hoje</span>':''}<br><small>${esc(n.email)}${n.lvl==2?' · via '+esc((ns.find(x=>x.id==n.via)||{}).n||''):''}</small></div><div class="mt"><small>Faturou (30d)</small><b>${brl(n.fat)}</b><small>${n.vendas} vendas</small></div><div class="mt"><small>Conversão Pix</small><b>${n.conv==null?'sem Pix':pct(n.conv)}</b>${n.cm30?`<small class="ac-t">rendeu ${brl(n.cm30)}</small>`:'<small>&nbsp;</small>'}</div></div>`;
+ return `<div class="card static hlc"><div class="eyebrow">% Sua comissão</div><div class="big" style="margin:2px 0 6px">${pct(G().share,0)}</div><p class="sub" style="margin:0">do lucro da Norevia em cada venda da sua rede${G().share2?` (e ${pct(G().share2,0)} nas vendas dos indiretos)`:''}. Lucro é a taxa cobrada do seller menos o custo de processar a venda. O valor entra no seu saldo quando o Pix é pago.</p></div>`+
+ kp([['Total na rede',ns.length,'','i','','hl'],['Indicados diretos',dir.length,'','i'],['Indicados indiretos',ind.length,'','i'],['Bloqueados',ns.filter(n=>n.st=='Bloqueado').length,'','i']])+
+ `<div class="card static" style="padding:0"><div class="ch" style="padding:14px 16px;border-bottom:1px solid var(--bd)"><span class="row" style="margin:0"><b>${ico(I.sel,16)} Minha hierarquia</b><input class="in" placeholder="Procurar por nome ou e-mail" oninput="gsearch(this.value)" style="width:260px"></span><span class="row" style="margin:0"><span class="tgl"><button class="${GF=='todos'?'on':''}" onclick="GF='todos';render()">Todos</button><button class="${GF=='idle'?'on':''}" onclick="GF='idle';render()">Não rodaram hoje</button></span><button class="btn sm o" onclick="document.querySelectorAll('.nrow.ind').forEach(r=>r.hidden=false)">Expandir</button><button class="btn sm o" onclick="document.querySelectorAll('.nrow.ind').forEach(r=>r.hidden=true)">Recolher</button></span></div><div style="padding:14px 16px">
+ <div class="nrow me"><span class="av">${esc(G().n[0])}</span><div class="nm"><b>${esc(G().n)}</b><br><small class="ac-t">Você</small></div></div>
+ ${dir.map(d=>row(d)+ind.filter(i=>i.via==d.id).map(row).join('')).join('')||'<p class="sub">Sua rede ainda está vazia. Compartilhe seu link em Meus links.</p>'}</div></div>`};
+function gsearch(q){q=q.trim().toLowerCase();document.querySelectorAll('.nrow[data-q]').forEach(r=>r.hidden=!!q&&!r.dataset.q.includes(q))}
+
+let GVF='Todas',GVL=30;
+V.g_vendas=()=>{const nm=id=>(ST.net.find(n=>n.id==id)||{}).n||'—',a=ST.sales.slice().reverse(),l=a.filter(x=>GVF=='Todas'||x.st==GVF),M=MR(),pm=a.filter(x=>x.st=='Pago'&&x.pt>=M.m0);
+ return `<div class="eyebrow">Gerente de contas</div><h1>Vendas da rede</h1><p class="sub">Últimos 60 dias · sua comissão em cada Pix pago</p>`+kp([['TPV da rede no mês',sumA(pm),pm.length+' Pix pagos'],['Sua comissão no mês',pm.reduce((t,x)=>t+x.cm,0),shareTxt()],['Pendentes agora',a.filter(x=>x.st=='Pendente').length,'aguardando pagamento','i']])+
+ `<div class="row"><span class="tgl">${['Todas','Pago','Pendente','Expirado','Bloqueado'].map(x=>`<button class="${x==GVF?'on':''}" onclick="GVF='${x}';GVL=30;render()">${x}</button>`).join('')}</span><span class="chiph">${nf(l.length)} venda(s)</span></div>`+
+ tbl(['Player','Valor','Sua comissão','Status','Quando'],l.slice(0,GVL).map(x=>[`<b>${esc(nm(x.s))}</b>`,brl(x.a),x.st=='Pago'?`<b class="ok-t">${brl(x.cm)}</b>`:'—',bd(x.st),ago(x.pt||x.ts)]),'Nenhuma venda na rede.')+(l.length>GVL?`<button class="btn o" onclick="GVL+=30;render()">Carregar mais</button>`:'')};
+
+V.g_wallet=()=>{const g=G();return `<div class="eyebrow">Gerente de contas</div><h1>Carteira</h1><p class="sub">Suas comissões entram aqui. Para sacar, transfira para a sua conta de seller.</p>`+
+ kp([['Saldo de comissões',g.bal,'disponível para transferir','m','','hl'],['Comissões recebidas',g.earn,'desde o início'],['Já transferido',g.out,ST.mt.length+' transferência(s)']])+
+ `<div class="g2e"><div class="card static" id="gwc"><b>Transferir para a conta de seller</b><p class="sub" style="margin:4px 0 0">Cai na hora no saldo da subconta escolhida. De lá você saca por Pix, Wise ou Inter Global.</p>
+ <label class="lb">Valor</label><div class="fm"><input id="gt_a" type="number" min="1" step="0.01" placeholder="R$ 0,00"><button class="btn o" onclick="$('#gt_a').value=(${g.bal}).toFixed(2)">Máx.</button></div>
+ <label class="lb">Subconta de destino</label><select id="gt_u" class="sel" style="width:100%">${g.subs.map(u=>`<option value="${u.id}">${esc(u.n)} — saldo ${brl(u.bal)}</option>`).join('')}</select>
+ <button class="btn big" onclick="gTransfer()">Transferir</button><small class="err" id="gt_e"></small></div>
+ <div class="card static"><b>Como funciona</b><div class="sum"><div><span>Comissões recebidas (Pix pagos da rede)</span><b>${brl(g.earn)}</b></div><div><span>− Transferido para a conta de seller</span><b>${brl(g.out)}</b></div><div class="tot"><span>= Saldo de comissões</span><b class="ok">${brl(g.bal)}</b></div></div><button class="btn o" style="margin-top:12px" onclick="switchMode('seller')">${ico(I.usr,16)} Ir para o modo Seller e sacar</button></div></div>`+
+ `<h3>Histórico</h3>`+tbl(['Transferência','Destino','Valor','Quando'],ST.mt.map(t=>[`<span class="mono">${t.id.slice(0,10)}</span>`,esc((g.subs.find(u=>u.id==t.u)||{}).n||'—'),`<b>${brl(t.a)}</b>`,dt(t.ts)]),'Nenhuma transferência ainda.')};
+async function gTransfer(){const a=+$('#gt_a').value;try{await act('mgrTransfer',{a,u:$('#gt_u').value},'#gt_e');toast(`Transferido <b>${brl(a)}</b> para a sua conta de seller`)}catch(e){const c=$('#gwc');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}}
+
+V.g_rank=()=>{const ns=netStats().sort((a,b)=>b.tpvM-a.tpvM),r=ST.rank,pos=r.findIndex(x=>x.id==G().id);
+ return `<div class="eyebrow">Gerente de contas</div><h1>Ranking</h1><p class="sub">Mês de ${MR().mn}</p>`+
+ `<div class="g2h"><div class="card hlc"><small>Sua posição entre os gerentes</small><div class="big">${pos>=0?'#'+(pos+1):'—'} <span style="font-size:16px;color:var(--mu)">de ${r.length}</span></div><p class="sub" style="margin:0">TPV da sua rede no mês: <b style="color:var(--tx)">${brl(pos>=0?r[pos].tpv:0)}</b>${pos>0?` · faltam ${brl(r[pos-1].tpv-r[pos].tpv)} para passar o #${pos}`:''}</p></div>
+ <div class="card static"><b>Gerentes</b>${r.map((x,i)=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--bd)"><span class="src">${medal(i)}<b>${esc(x.n)}</b>${x.id==G().id?' <span class="b ac">você</span>':''}</span><span class="mono">${brl(x.tpv)}</span></div>`).join('')||'<p class="sub">Sem gerentes.</p>'}</div></div>`+
+ `<h3>Ranking da sua rede</h3>`+tbl(['#','Player','TPV no mês','Pix pagos (30d)','Sua comissão no mês'],ns.map((n,i)=>[medal(i),`<b>${esc(n.n)}</b>`,brl(n.tpvM),String(n.vendas),`<span class="ok-t">${brl(n.cmM)}</span>`]),'Sua rede ainda está vazia.')};
+
+/* ---- troca de modo (CEO | Gerente | Seller) ---- */
+const MODE={ceo:['CEO','ceo'],gerente:['Gerente','sel'],seller:['Seller','usr']};
+const HOME={admin:'ceo',gerente:'g_home',seller:'home'};
+async function switchMode(m){if(m==ST.mode)return;try{await act('setMode',{mode:m});location.hash=HOME[ST.role];render();toast('Modo <b>'+MODE[m][0]+'</b>')}catch(e){}}
+function renderModes(){const el=$('#modes');const ok=ST&&ST.modes&&ST.modes.length>1;document.body.classList.toggle('hasModes',!!ok);if(!ok){el.innerHTML='';el.hidden=true;return}el.hidden=false;el.innerHTML=ST.modes.map(m=>`<button class="${m==ST.mode?'on':''}" onclick="switchMode('${m}')" title="Modo ${MODE[m][0]}">${ico(I[MODE[m][1]],16)}${MODE[m][0]}</button>`).join('')}
+
+/* ---- CEO: gerentes ---- */
+const cmOf=x=>x.cm?Object.values(x.cm).reduce((a,b)=>a+b,0):0,sumCm=a=>a.reduce((t,x)=>t+cmOf(x),0);
+V.gerentes=()=>{const M=MR(),gs=ST.sellers.filter(s=>s.mgr),cur=paidIn(ST.sales,M.m0,M.n),netOf=g=>{const d=ST.sellers.filter(s=>s.ref==g.id&&s.id!=g.id),i=d.filter(s=>s.mgr).flatMap(x=>ST.sellers.filter(s=>s.ref==x.id&&s.id!=g.id));return{d,i}};
+ const tot=cur.reduce((t,x)=>t+cmOf(x),0),pay=gs.reduce((t,g)=>t+g.mgr.bal,0);
+ return head('Gerentes','Quem traz sellers e quanto ganha sobre o lucro da rede · '+M.mn)+kp([['Gerentes',gs.length,'','i'],['Comissões no mês',tot,'sai do lucro da operação','m','er'],['Saldo a transferir',pay,'comissões ainda na carteira dos gerentes']])+
+ tbl(['Gerente','Fatia','Rede','TPV da rede no mês','Comissão no mês','Saldo de comissão','Transferido',''],gs.map(g=>{const{d,i}=netOf(g),ids=new Set([...d,...i].map(s=>s.id)),c=cur.filter(x=>ids.has(x.s));return[`<b>${esc(g.n)}</b>${g.id==ST.me.sid?' <span class="b ac">você</span>':''}<br><small style="color:var(--mu)">${esc(g.email)}</small>`,`${pct(g.mgr.share,0)} direto${g.mgr.share2?' · '+pct(g.mgr.share2,0)+' indireto':''}`,`${d.length} diretos · ${i.length} indiretos`,brl(sumA(c)),`<span class="ok-t">${brl(c.reduce((t,x)=>t+((x.cm||{})[g.id]||0),0))}</span>`,brl(g.mgr.bal),brl(g.mgr.out),`<button class="btn sm" onclick="impG('${g.id}')">${ico(I.login,14)} Entrar como gerente</button><button class="btn sm o" onclick="EDIT='${g.id}';location.hash='sellers'">Configurar</button>`]}),'Nenhum gerente. Em Sellers → Configurar, marque "É gerente".')+
+ `<p class="sub">Comissão = fatia × lucro da Norevia na venda (taxa cobrada − custo do TPV). Direto: sellers indicados pelo gerente. Indireto: sellers indicados por gerentes da rede dele.</p>`};
+async function impG(id){await act('impersonate',{id,mode:'gerente'});location.hash='g_home';render();toast('Você entrou como gerente <b>'+esc(G().n)+'</b>','wa')}
+
+/* ---- CEO: Desvios & Lucros ---- */
+let DLE='';
+const SEV={alta:['er','Crítico'],media:['wa','Atenção'],boa:['ok','Em alta'],ok:['','Estável']};
+const sinal=s=>{const[c,l]=SEV[s.sev]||['','—'];return `<span class="b ${c}">${l}</span>${s.msg?` <small style="color:var(--mu)">${esc(s.msg)}</small>`:''}`;};
+const feeSum=(p,f,cost)=>`<div><span>Seller paga por Pix de R$ 100</span><b>${brl(p+f)}</b></div><div><span>Custo do adquirente (${pct(cost,2)})</span><b>${brl(100*cost)}</b></div><div class="tot"><span>Seu lucro por Pix de R$ 100</span><b class="ok">${brl(p+f-100*cost)}</b></div>`;
+const acqCostOf=id=>{const S=ST.sellers.find(x=>x.id==id)||{},a=ST.acq.find(x=>x.id==S.acq);return a?a.cost:.02;};
+V.dl=()=>{const M=MR(),cur=ceoData().cur,dev=ST.deviations||{sellers:[],supplier:[]},sup=dev.supplier.filter(x=>x.flags.length),sd=dev.sellers;
+ const tpv=sumA(cur),fee=sumF(cur),cost=sumC(cur),cmz=sumCm(cur),lucro=fee-cost-cmz,supX=sup.reduce((t,x)=>t+x.excess,0);
+ const alta=sd.filter(s=>s.sev=='alta'),media=sd.filter(s=>s.sev=='media'),hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+ const rows=sd.filter(s=>s.ptpv>0||s.tpv>0).sort((a,b)=>b.prof-a.prof);
+ return head('Desvios & Lucros','Lucro da operação e o que foge do padrão — por seller e no fornecedor',`<span class="chiph">atualizado ${hora}</span>`)+
+ kp([['Lucro da operação',lucro,`margem ${pct(tpv?lucro/tpv:0,2)} do TPV`,'m','','hl'],['TPV do mês',tpv,`${cur.length} Pix pagos`],['Custo do TPV',cost,`${pct(tpv?cost/tpv:0,2)} · adquirentes`,'m','er'],['Comissões de gerentes',cmz,`${pct(fee?cmz/fee:0)} das taxas`,'m','er'],['Desvio do fornecedor',supX,sup.length?'custo acima do contratado':'nada detectado','m',supX?'er':''],['Players em alerta',alta.length+media.length,`${alta.length} críticos · ${media.length} atenção`,'i',alta.length?'er':'']])+
+ `<h3>Desvio do fornecedor <span class="chiph" style="font-weight:400">· custo cobrado vs contratado, últimos 30 dias (dados de simulação)</span></h3>`+
+ (sup.length?sup.map(a=>`<div class="devcard ${a.flags[0].sev}"><div class="devh">${ico(I.acq,18)}<b>${esc(a.n)}</b><span class="b ${a.st=='Ativo'?'ok':'wa'}">${a.st}</span>${a.excess?`<span class="devimp">a recuperar ${brl(a.excess)}</span>`:''}</div>${a.flags.map(f=>`<div class="devmsg">${f.sev=='alta'?'🔴':'🟠'} ${esc(f.msg)}</div>`).join('')}<div class="sub" style="margin:6px 0 0">TPV 30d ${brl(a.tpv)} · custo médio aplicado ${pct(a.appliedAvg,2)} · contratado ${pct(a.cost,2)}${a.approval!=null?' · aprovação '+pct(a.approval):''}</div></div>`).join(''):`<div class="card static"><p class="sub" style="margin:0">Nenhum desvio de custo ou de aprovação detectado no fornecedor nos últimos 30 dias. ✅</p></div>`)+
+ `<h3>Lucro e desvio por seller <span class="chiph" style="font-weight:400">· clique na taxa para ajustar</span></h3>`+
+ tbl(['Seller','Taxa (o seller paga)','Lucro no mês','Margem','Desvio TPV','Conversão','Sinal',''],rows.flatMap(s=>{const r=`<tr><td><b>${esc(s.n)}</b>${s.st!='Ativo'?' '+bd(s.st):''}</td><td><button class="feebtn" onclick="DLE=DLE=='${s.id}'?'':'${s.id}';render()">${pct(s.fee.p/100,2)} + ${brl(s.fee.f)} ${ico('M6 9l6 6 6-6',12)}</button></td><td><b class="${s.prof>=0?'ok-t':'er-t'}">${brl(s.prof)}</b></td><td>${pct(s.margin,2)}</td><td>${dvB(s.tpv,s.ptpv)}</td><td>${s.cv==null?'<span style="color:var(--mu)">sem Pix</span>':pct(s.cv,0)+(s.dCv!=null&&Math.abs(s.dCv)>=.02?(s.dCv<0?' <span class="er-t">▼</span>':' <span class="ok-t">▲</span>'):'')}</td><td>${sinal(s)}</td><td><button class="btn sm o" onclick="imp('${s.id}')">${ico(I.login,14)} Entrar</button></td></tr>`;return DLE==s.id?[r,`<tr class="edit"><td colspan="8">${feeForm(s)}</td></tr>`]:[r];}))+
+ apiFeeCard()+
+ `<h3>Auditoria de alterações de taxa</h3>`+tbl(['Seller','De','Para','Origem','Quando'],(ST.feeLog||[]).map(f=>[esc(f.sn||'—'),`${pct(f.from.p/100,2)} + ${brl(f.from.f)}`,`<b>${pct(f.to.p/100,2)} + ${brl(f.to.f)}</b>`,f.via=='api'?'<span class="b ac">API</span>':'<span class="b">painel</span>',dt(f.ts)]),'Nenhuma alteração de taxa registrada ainda.');};
+function feeForm(s){const cost=acqCostOf(s.id);return `<div class="feeform"><div class="row" style="margin:0 0 8px"><b>Ajustar taxa de ${esc(s.n)}</b><span class="chiph">é a mesma taxa que o seller vê no painel dele — sem camada oculta</span></div><div class="fm"><label class="chiph">Taxa % <input id="fe_p" class="in" style="width:92px" type="number" step="0.01" min="0" max="30" value="${s.fee.p.toFixed(2)}" oninput="feePrev('${s.id}')"></label><label class="chiph">+ fixa R$ <input id="fe_f" class="in" style="width:92px" type="number" step="0.01" min="0" value="${s.fee.f.toFixed(2)}" oninput="feePrev('${s.id}')"></label><button class="btn" onclick="feeSave('${s.id}')">Salvar taxa</button><button class="btn o" onclick="DLE='';render()">Cancelar</button></div><div class="sum" id="fe_sum" style="max-width:560px">${feeSum(s.fee.p,s.fee.f,cost)}</div><small class="err" id="fe_e"></small></div>`;}
+function feePrev(id){const el=$('#fe_sum');if(!el)return;el.innerHTML=feeSum(+$('#fe_p').value||0,+$('#fe_f').value||0,acqCostOf(id));}
+async function feeSave(id){try{await act('sellerUpdate',{id,p:$('#fe_p').value,f:$('#fe_f').value},'#fe_e');DLE='';render();toast('Taxa atualizada — o seller já vê a nova taxa')}catch(e){}}
+function apiFeeCard(){const B=ST.srv.base,k=ST.apiKey||'';return `<h3>Alterar taxa por API</h3><div class="card static"><p class="sub" style="margin:0 0 10px">A mesma taxa transparente, controlada por programa — útil para mudar o desvio da tecnologia de qualquer seller na hora. Toda alteração entra na auditoria acima.</p><div class="row"><code class="mono" id="akey">${esc(mask(k))}</code><button class="btn sm o" onclick="$('#akey').textContent='${esc(k)}'">Mostrar</button><button class="btn sm o" onclick="copy('${esc(k)}')">Copiar chave</button><span class="chiph">chave admin · data/LOGINS.txt</span></div><pre><button class="cp" onclick="copy(this.parentElement.innerText.replace(/^Copiar\\n?/,''))">Copiar</button>${esc(`# muda a taxa do seller (o seller vê na hora)\ncurl -X PATCH ${B}/admin/v1/sellers/SELLER_ID/fee \\\n  -H "Authorization: Bearer ${k?k.slice(0,14)+'…':'ADMIN_KEY'}" \\\n  -H "Content-Type: application/json" \\\n  -d '{ "percent": 4.5, "fixed": 0.99 }'`)}</pre><div class="chips"><span class="b">GET /admin/v1/sellers</span><span class="b">PATCH /admin/v1/sellers/:id/fee</span><span class="b">GET /admin/v1/deviations</span></div></div>`;}
+const NAV={admin:[['Painel',[['ceo','Visão CEO','ceo'],['dl','Desvios & Lucros','pulse'],['sellers','Sellers','sel'],['gerentes','Gerentes','usr'],['tx','Transações','tx']]],['Financeiro',[['saques','Saques','w'],['acq','Adquirentes','acq']]],['Desenvolvedor',[['docs','Docs da API','doc']]]],
+ gerente:[['Gerente de contas',[['g_home','Dashboard','d'],['g_links','Meus links','link'],['g_rede','Minha rede','sel'],['g_vendas','Vendas','tx'],['g_wallet','Carteira','w'],['g_rank','Ranking','ceo']]]],
+ seller:[['Principal',[['home','Visão geral','d'],['vendas','Vendas','tx'],['produtos','Produtos','box'],['clientes','Clientes','usr']]],['Cobrança',[['checkout','Checkout','cart'],['links','Links de pagamento','link'],['assin','Assinaturas','rep']]],['Crescimento',[['track','Tracker','t'],['integ','Integrações','plug']]],['Financeiro',[['fin','Saldo e saques','w'],['disp','Disputas','alert'],['anti','Antifraude','shield']]],['Desenvolvedor',[['api','API Pix','k']]],['Conta',[['subs','Subcontas','sub']]]]};
+const ROUTES={admin:['ceo','dl','sellers','gerentes','tx','saques','acq','docs'],gerente:['g_home','g_links','g_rede','g_vendas','g_wallet','g_rank'],seller:['home','vendas','produtos','clientes','checkout','links','assin','track','integ','fin','disp','anti','api','subs']};
+const ADM=ROUTES.admin,SEL=ROUTES.seller;
+const rk=()=>{const k=location.hash.slice(1).split('?')[0];return ST&&ROUTES[ST.role].includes(k)?k:ST?HOME[ST.role]:'ceo'};
+function render(){if(!ST)return;const k=rk(),ch=k!=route;route=k;dirty=0;const R=ST.role,adm=R=='admin';
+ $('#role').textContent=adm?'Painel CEO':R=='gerente'?'Painel do gerente':ST.imp?'Conta do seller':'Painel do seller';
+ $('#nav').innerHTML=NAV[R].map(([g,a])=>`<div class="grp">${g}</div>`+a.map(([i,n,c])=>`<a class="${i==k?'on':''}" href="#${i}" title="${n}">${ico(I[c])}<span>${n}</span></a>`).join('')).join('');
+ const who=adm?{n:'CEO',s:ST.me.email}:R=='gerente'?{n:G().n,s:ST.imp?'acessado pelo CEO':G().email}:{n:me().n,s:ST.imp?'acessado pelo CEO':me().email};
+ $('#usr').innerHTML=`<i>${esc(who.n[0])}</i><div>${esc(who.n)}<br><small>${esc(who.s)}</small></div><button onclick="logout()" title="Sair" aria-label="Sair">${ico(I.out,16)}</button>`;
+ $('#impb').innerHTML=ST.imp&&!adm?`<div class="imp">${ico(I.login,18)}<span>Você está dentro da conta de <b>${esc(R=='gerente'?G().n:me().n)}</b> como CEO. Tudo o que fizer aqui vale para essa conta.</span><button class="btn sm" onclick="unimp()">Voltar ao painel CEO</button></div>`:'';
+ if(adm){$('#hl').innerHTML=`<span class="chiph">${ico(I.ceo,16)} Norevia · infraestrutura de pagamentos Pix</span>`;$('#hr').innerHTML=`<button class="live ${ST.cfg.live?'on':''}" onclick="act('live',{on:${!ST.cfg.live}}).then(()=>toast(ST.cfg.live?'Simulação ao vivo ligada':'Simulação ao vivo pausada',ST.cfg.live?'ok':'wa'))" title="Gera Pix simulados no ritmo médio real da operação">Simulação ao vivo</button>`}
+ else if(R=='gerente'){const g=G();$('#hl').innerHTML=`<span class="chiph">${ico(I.sel,16)} Gerente de contas · ${ST.net.length} players na rede</span>`;
+  $('#hr').innerHTML=`<span class="live ${ST.live?'on':''}" style="cursor:default">Ao vivo</span><a class="hbal" href="#g_wallet" style="text-decoration:none" title="Saldo de comissões"><small>Comissões</small><b>${brl(g.bal)}</b></a><span class="acct" style="cursor:default"><i>${esc(g.n[0])}</i><span><b>${esc(g.n)}</b><small>sua fatia ${pct(g.share,0)} do lucro</small></span></span>`}
+ else{const u=selSub();$('#hl').innerHTML=`<span class="chiph">${ico(I.sub,16)} Operação ativa: <b style="color:var(--tx)">${esc(u.n)}</b></span>`;
+  $('#hr').innerHTML=`<span class="live ${ST.live?'on':''}" style="cursor:default">Ao vivo</span><div class="hbal" title="Saldo disponível da subconta ativa"><small>Disponível</small><b>${brl(u.bal)}</b></div><button class="acct" onclick="acctModal()" title="Trocar ou criar subconta"><i>${esc(u.n[0])}</i><span><b>${esc(me().n)}</b><small>${esc(u.n)} · ${me().subs.length} ${me().subs.length>1?'contas':'conta'}</small></span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>`}
+ renderModes();
+ const v=$('#v'),y=scrollY;v.innerHTML=V[k]();
+ if(ch){v.classList.remove('enter');void v.offsetWidth;v.classList.add('enter');clearTimeout(render.t);render.t=setTimeout(()=>v.classList.remove('enter'),1300);countUp();scrollTo(0,0)}else scrollTo(0,y);
+ if(k=='track')tlink();if(k=='fin')wprev();if(k=='sellers')sfPrev()}
+function countUp(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.querySelectorAll('#v strong[data-v]').forEach(el=>{if(el.dataset.v==='')return;const v=+el.dataset.v,k=el.dataset.k,t0=performance.now();const f=t=>{const p=Math.min((t-t0)/750,1);el.textContent=KF[k](v*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
+function toast(m,k='ok'){const t=document.createElement('div');t.className='toast '+k;t.innerHTML=m;$('#toasts').appendChild(t);const all=$('#toasts').children;if(all.length>4)all[0].remove();setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),350)},4200)}
+function modal(h){const d=document.createElement('div');d.className='ov';d.innerHTML=`<div class="pp l" role="dialog" aria-modal="true">${h}</div>`;d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-x]')){d.classList.add('out');setTimeout(()=>d.remove(),250)}});document.body.appendChild(d)}
+function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copiado')).catch(()=>toast('Não foi possível copiar','er'))}
+function thToggle(e){e.stopPropagation();const p=$('#thp');if(!p.hidden){p.hidden=true;return}p.innerHTML='<b>Tema do painel</b>'+TH.map(([k,n,a,b])=>`<button class="tho ${P.th==k?'on':''}" onclick="setTh('${k}')"><i style="--a:${a};--b:${b}"></i>${n}${P.th==k?'<em class="ck">✓</em>':''}</button>`).join('');p.hidden=false}
+function setTh(k){const r=document.documentElement;r.classList.add('thx');P.th=k;psave();r.dataset.th=k;$('#thp').hidden=true;setTimeout(()=>r.classList.remove('thx'),500)}
+document.addEventListener('click',e=>{const p=$('#thp');if(p&&!p.hidden&&!p.contains(e.target))p.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key=='Escape'){$('#thp').hidden=true;const o=document.querySelector('.ov');if(o)o.remove()}});
+document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')},{passive:true});
+let mini=false;try{mini=localStorage.getItem('bv-mini')=='1'}catch(e){}
+function setMini(v){mini=v;$('#app').classList.toggle('mini',v);const t=$('#tg'),s=v?'Expandir menu':'Recolher menu';t.title=s;t.setAttribute('aria-label',s);t.querySelector('span').textContent=s;try{localStorage.setItem('bv-mini',v?'1':'0')}catch(e){}}
+$('#tg').onclick=()=>setMini(!mini);setMini(mini);
+addEventListener('hashchange',()=>render());
+(function(){const q=new URLSearchParams(location.hash.split('?')[1]||'');if(q.get('tt')||q.get('tterr')){history.replaceState(null,'',location.pathname+'#track');setTimeout(()=>q.get('tterr')?toast('TikTok: '+esc(q.get('tterr')),'er'):toast('TikTok Ads conectado'),800)}load()})();
+</script>
+</body></html>
