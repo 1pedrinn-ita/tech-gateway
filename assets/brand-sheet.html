@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Ryvo Group — prancha da marca</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1620px;background:#0B0B14;overflow:hidden}
+body{font-family:"Outfit",sans-serif;color:#F4F2FF;padding:64px 72px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px}
+.head h1{font-weight:600;font-size:40px;letter-spacing:-.02em;line-height:1}
+.head h1 span{background:linear-gradient(135deg,#7B7FF5,#B8A6F4 55%,#F4C6EE);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head p{font:500 13px "JetBrains Mono",monospace;letter-spacing:.3em;color:#9C99B8;text-transform:uppercase}
+.tile{border-radius:22px;border:1px solid #2A2A44;display:grid;place-items:center;position:relative;overflow:hidden}
+.hero{height:430px;background:radial-gradient(640px 360px at 96% 0%,rgba(123,127,245,.7),transparent 62%),radial-gradient(520px 260px at 55% 115%,rgba(244,198,238,.22),transparent 60%),#05050A}
+.hero:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 205deg at 60% 52%,transparent 0 41%,rgba(184,166,244,.32) 46%,rgba(244,198,238,.12) 48%,transparent 53%);filter:blur(26px)}
+.hero:after{content:"";position:absolute;inset:0;border-radius:22px;box-shadow:inset 0 0 0 1px rgba(184,166,244,.25)}
+.grid{display:grid;grid-template-columns:584px 336px;gap:16px;margin-top:16px}
+.grid .tile{height:270px}
+.white{background:#fff;border-color:#fff}
+.grad{background:linear-gradient(135deg,#7B7FF5 0%,#B8A6F4 55%,#F4C6EE 100%);border:0}
+.dark{background:#12121F}
+.lock{display:flex;align-items:center;gap:22px;position:relative}
+.lock .w{display:flex;flex-direction:column;line-height:1}
+.lock b{font-weight:600;letter-spacing:-.035em}
+.lock i{font:500 14px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.42em;margin-top:8px;text-transform:uppercase}
+.hero b{font-size:132px;color:#fff}.hero i{color:#B8A6F4;font-size:17px;margin-left:6px}.hero svg{width:150px;height:150px}
+.white b{font-size:76px;color:#0B0B14}.white i{color:#6B6886}.white .lock svg{width:88px;height:88px}
+.grad b{font-size:76px;color:#fff}.grad i{color:rgba(255,255,255,.88)}.grad .lock svg{width:88px;height:88px}
+.solo{width:178px;height:178px}
+.rule{margin-top:34px}
+.rule h2{font-weight:600;font-size:26px;letter-spacing:-.01em;margin-bottom:6px}
+.rule .sub{color:#9C99B8;font-size:16px;margin-bottom:22px}
+.bar{display:flex;height:120px;border-radius:18px;overflow:hidden;border:1px solid #2A2A44}
+.bar div{display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px}
+.bar strong{font:600 34px "Outfit",sans-serif;line-height:1}
+.bar small{font:500 12px "JetBrains Mono",monospace;margin-top:6px;letter-spacing:.04em}
+.b60{flex:60;background:#0B0B14;box-shadow:inset 0 0 0 1px #2A2A44}.b60 small{color:#9C99B8}
+.b30{flex:30;background:#F4F2FF;color:#0B0B14}.b30 small{color:#55526E}
+.b10{flex:10;background:linear-gradient(160deg,#7B7FF5,#B8A6F4 55%,#F4C6EE);color:#0B0B14;padding:16px 12px!important}.b10 small{color:#2A2350}
+.legend{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:18px}
+.legend div{font-size:15px;color:#C9C6DD;line-height:1.35}
+.legend b{display:block;color:#F4F2FF;font-weight:600;font-size:16px;margin-bottom:2px}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:34px;padding-top:22px;border-top:1px solid #24243A;color:#9C99B8;font-size:15px}
+.foot .n{display:flex;align-items:center;gap:12px;color:#F4F2FF;font-weight:600;font-size:20px}
+.foot .n svg{width:30px;height:30px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="g" x1="4" y1="40" x2="44" y2="8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7B7FF5"/><stop offset=".55" stop-color="#B8A6F4"/><stop offset="1" stop-color="#F4C6EE"/></linearGradient>
+<symbol id="m" viewBox="0 0 48 48"><path d="M24 6L44 28H33L24 18L15 28H4Z"/><path d="M24 24L40.4 42H29.5L24 36L18.5 42H7.6Z"/></symbol>
+</defs></svg>
+
+<div class="head"><h1>Ryvo <span>Group</span></h1><p>identidade visual</p></div>
+
+<div class="tile hero"><div class="lock"><svg fill="url(#g)"><use href="#m"/></svg><div class="w"><b>Ryvo</b><i>group</i></div></div></div>
+
+<div class="grid">
+  <div class="tile white"><div class="lock"><svg fill="url(#g)"><use href="#m"/></svg><div class="w"><b>Ryvo</b><i>group</i></div></div></div>
+  <div class="tile grad"><svg class="solo" fill="#fff"><use href="#m"/></svg></div>
+  <div class="tile grad"><div class="lock"><svg fill="#fff"><use href="#m"/></svg><div class="w"><b>Ryvo</b><i>group</i></div></div></div>
+  <div class="tile dark"><svg class="solo" fill="url(#g)"><use href="#m"/></svg></div>
+</div>
+
+<div class="rule">
+  <h2>Regra 60-30-10</h2>
+  <p class="sub">Como as cores se dividem em qualquer tela, post ou material da Ryvo.</p>
+  <div class="bar">
+    <div class="b60"><strong>60%</strong><small>INK · #0B0B14</small></div>
+    <div class="b30"><strong>30%</strong><small>MIST · #F4F2FF</small></div>
+    <div class="b10"><strong>10%</strong><small>GRADIENTE</small></div>
+  </div>
+  <div class="legend">
+    <div><b>Dominante — Ink</b>Fundos, painéis e áreas grandes. Dá o tom premium e escuro.</div>
+    <div><b>Secundária — Mist</b>Textos, cards claros e superfícies de leitura.</div>
+    <div><b>Destaque — Gradiente</b>Violet → Blush. Logo, botões e números-chave.</div>
+  </div>
+</div>
+
+<div class="foot"><div class="n"><svg fill="url(#g)"><use href="#m"/></svg>Ryvo Group</div><div>Outfit · JetBrains Mono</div></div>
+</body></html>
