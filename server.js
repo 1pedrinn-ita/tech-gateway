@@ -1,4 +1,4 @@
-// Norevia — motor de pagamentos Pix (protótipo) + painel CEO/seller + checkout hospedado. Sem dependências.
+// Ryvo — motor de pagamentos Pix (protótipo) + painel CEO/seller + checkout hospedado. Sem dependências.
 // Uso: node server.js  →  http://localhost:3000
 // Dados ficam em data/db.json. Senha inicial do CEO: data/ADMIN_LOGIN.txt (ou config.json → admin).
 'use strict';
@@ -15,7 +15,7 @@ const TTC = {
   redirect_uri: process.env.TIKTOK_REDIRECT_URI || (CFG.tiktok || {}).redirect_uri || `${PUBLIC_URL}/api/tiktok/callback`,
 };
 const TT = 'https://business-api.tiktok.com/open_api/v1.3', GRAPH = 'https://graph.facebook.com/v21.0';
-const MERCHANT = 'NOREVIA PAGAMENTOS', CITY = 'SAO PAULO', USD_BRL = 5.40, SPREAD = .008, DAY = 864e5;
+const MERCHANT = 'RYVO GROUP', CITY = 'SAO PAULO', USD_BRL = 5.40, SPREAD = .008, DAY = 864e5;
 
 /* ================= utilidades ================= */
 const RS = n => Math.round((n + Number.EPSILON) * 100) / 100;
@@ -84,7 +84,7 @@ const lost = x => x.dp && x.dp.st === 'Perdida';
 // saldo por subconta: comissão dos Pix pagos − valor devolvido em disputas perdidas − saques não recusados
 // + comissões de gerente transferidas para esta subconta
 const subBal = (sid, uid) => RS(db.sales.reduce((t, x) => x.s === sid && x.u === uid && x.st === 'Pago' ? t + x.a - x.f - (lost(x) ? x.a : 0) : t, 0) - db.po.reduce((t, p) => p.s === sid && p.u === uid && p.st !== 'Recusado' ? t + p.a : t, 0) + (db.mt || []).reduce((t, m) => m.s === sid && m.u === uid ? t + m.a : t, 0));
-/* ---- gerentes: comissão = % do lucro Norevia (taxa − custo do TPV) das vendas da rede ---- */
+/* ---- gerentes: comissão = % do lucro Ryvo (taxa − custo do TPV) das vendas da rede ---- */
 const profit = x => x.f - x.a * x.c;
 const isMgr = s => !!(s && s.mgr);
 function cmFor(s, x) {
@@ -133,7 +133,7 @@ function mkDispute(x, st) { x.dp = { id: 'MED-' + (++db.seq), st: st || 'Aberta'
 const SEEDPW = [];
 function seed() {
   db = { v: 6, rev: 1, seq: 1000, evs: 0, ev: [], sess: {}, oauth: {}, cfg: { live: true }, admin: { email: 'ceo@bluvia.local', pw: '', sid: '' }, sellers: [], sales: [], po: [], mt: [],
-    acq: [{ id: 'core', n: 'Norevia Core (próprio)', cost: .02, st: 'Ativo' }, { id: 'acq_b', n: 'Adquirente B', cost: .02, st: 'Ativo', drift: .25 }, { id: 'acq_c', n: 'Adquirente C', cost: .02, st: 'Standby' }] };
+    acq: [{ id: 'core', n: 'Ryvo Core (próprio)', cost: .02, st: 'Ativo' }, { id: 'acq_b', n: 'Adquirente B', cost: .02, st: 'Ativo', drift: .25 }, { id: 'acq_c', n: 'Adquirente C', cost: .02, st: 'Standby' }] };
   // [chave, nome, e-mail, taxa %, taxa fixa, adquirente, subcontas, pix/dia, tendência do mês, saque automático, indicado por, perfil de gerente, login de teste]
   const SD = [
     ['ceo', 'Conta do CEO', 'ceo@bluvia.local', .0399, .99, 'core', [['Operação própria', [0, 3]]], 3, 1.1, true, null, { share: 0, share2: 0 }, false],
@@ -612,19 +612,19 @@ function findProd(pid) { for (const s of db.sellers) for (const u of s.subs) { c
 function payPage(f) {
   const ok = f && f.p.st === 'Ativo' && f.s.st === 'Ativo';
   return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${ok ? escH(f.p.n) + ' – ' : ''}Pagamento Pix</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(800px 500px at 80% -10%,rgba(255,107,91,.32),transparent 60%),#0A1430;color:#F3EDE1;font:15px/1.5 "Space Grotesk",system-ui,sans-serif}
-.c{width:min(420px,100%);background:#111E42;border:1px solid #273A68;border-radius:20px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:r .5s cubic-bezier(.2,.8,.2,1)}@keyframes r{from{transform:translateY(14px);opacity:0}}
-.lk{display:flex;align-items:center;gap:9px;margin-bottom:18px}.lk b{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:19px;letter-spacing:-.025em}
-h1{font-size:20px;margin:0}.m{color:#92A0C4;font-size:13px}.v{font-size:30px;font-weight:700;margin:8px 0 16px;font-family:"Space Grotesk",sans-serif}input{width:100%;background:#1A2A54;border:1px solid #273A68;color:#F3EDE1;border-radius:10px;padding:11px 12px;font:inherit;margin-bottom:10px;outline:none}input:focus{border-color:#FF6B5B}
-button{width:100%;border:0;border-radius:10px;padding:13px;font:600 15px "Space Grotesk",system-ui,sans-serif;background:#FF6B5B;color:#fff;cursor:pointer}button.o{background:none;border:1px solid #273A68;color:#F3EDE1;margin-top:8px}.e{color:#E5484D;font-size:13px;min-height:1.2em}
-.q{background:#fff;border-radius:14px;padding:10px;display:block;width:220px;margin:14px auto;line-height:0}.q svg{width:200px;height:200px}.b{font:12px monospace;word-break:break-all;background:#1A2A54;border-radius:9px;padding:10px;margin:8px 0}
-.ok{text-align:center}.ok svg{filter:drop-shadow(0 0 14px #34D39A)}.st{display:flex;align-items:center;gap:8px;justify-content:center;color:#F5B13C;font-size:13px;margin:8px 0}.st i{width:8px;height:8px;border-radius:50%;background:#F5B13C;animation:p 1.4s infinite}@keyframes p{50%{opacity:.3}}
-.sec{display:flex;gap:6px;align-items:center;justify-content:center;color:#92A0C4;font-size:12px;margin-top:14px}</style></head><body><div class="c" id="c">
-<div class="lk"><svg viewBox="0 0 48 48" width="28" height="28"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#F0563F"/></linearGradient></defs><rect width="48" height="48" rx="13" fill="url(#g)"/><path d="M13 34C19.5 34 21 20.5 33 15.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="13" cy="34" r="3.7" fill="#fff"/><path d="M27 15.5L34 14.6L33.4 21.6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Norevia</b></div>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(800px 500px at 80% -10%,rgba(139,124,246,.32),transparent 60%),#0B0B14;color:#F4F2FF;font:15px/1.5 "Outfit","Space Grotesk",system-ui,sans-serif}
+.c{width:min(420px,100%);background:#12121F;border:1px solid #2A2A44;border-radius:20px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:r .5s cubic-bezier(.2,.8,.2,1)}@keyframes r{from{transform:translateY(14px);opacity:0}}
+.lk{display:flex;align-items:center;gap:9px;margin-bottom:18px}.lk b{font-family:"Outfit",sans-serif;font-weight:600;font-size:19px;letter-spacing:-.025em}
+h1{font-size:20px;margin:0}.m{color:#9C99B8;font-size:13px}.v{font-size:30px;font-weight:700;margin:8px 0 16px;font-family:"Space Grotesk",sans-serif}input{width:100%;background:#1A1A2C;border:1px solid #2A2A44;color:#F4F2FF;border-radius:10px;padding:11px 12px;font:inherit;margin-bottom:10px;outline:none}input:focus{border-color:#8B7CF6}
+button{width:100%;border:0;border-radius:10px;padding:13px;font:600 15px "Space Grotesk",system-ui,sans-serif;background:linear-gradient(135deg,#7B7FF5,#C9A2F2);color:#fff;cursor:pointer}button.o{background:none;border:1px solid #2A2A44;color:#F4F2FF;margin-top:8px}.e{color:#F2546B;font-size:13px;min-height:1.2em}
+.q{background:#fff;border-radius:14px;padding:10px;display:block;width:220px;margin:14px auto;line-height:0}.q svg{width:200px;height:200px}.b{font:12px monospace;word-break:break-all;background:#1A1A2C;border-radius:9px;padding:10px;margin:8px 0}
+.ok{text-align:center}.ok svg{filter:drop-shadow(0 0 14px #3DD9A4)}.st{display:flex;align-items:center;gap:8px;justify-content:center;color:#F5B947;font-size:13px;margin:8px 0}.st i{width:8px;height:8px;border-radius:50%;background:#F5B947;animation:p 1.4s infinite}@keyframes p{50%{opacity:.3}}
+.sec{display:flex;gap:6px;align-items:center;justify-content:center;color:#9C99B8;font-size:12px;margin-top:14px}</style></head><body><div class="c" id="c">
+<div class="lk"><svg viewBox="0 0 48 48" width="28" height="28"><defs><linearGradient id="g" x1="4" y1="40" x2="44" y2="8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7B7FF5"/><stop offset=".55" stop-color="#B8A6F4"/><stop offset="1" stop-color="#F4C6EE"/></linearGradient></defs><path d="M5 9h11l11 15-11 15H5l11-15z" fill="url(#g)"/><path d="M21 9h11l11 15-11 15H21l11-15z" fill="url(#g)"/></svg><b>Ryvo</b></div>
 ${ok ? `<div class="m">${escH(f.u.n)}</div><h1>${escH(f.p.n)}</h1><div class="v">${brl(f.p.p)}</div>
 <form id="f"><input name="name" placeholder="Nome completo" required minlength="3" autocomplete="name"><input name="email" type="email" placeholder="E-mail" required autocomplete="email"><input name="document" placeholder="CPF" required inputmode="numeric"><div class="e" id="e"></div><button>Gerar Pix</button></form>
-<div class="sec">🔒 Pagamento processado pela Norevia</div>` : '<h1>Link indisponível</h1><p class="m">Este produto não está mais à venda.</p>'}
+<div class="sec">🔒 Pagamento processado pela Ryvo</div>` : '<h1>Link indisponível</h1><p class="m">Este produto não está mais à venda.</p>'}
 </div><script>
 const P='${ok ? f.p.id : ''}',SB=${SANDBOX},esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const cpfOk=d=>{if(!/^\\d{11}$/.test(d)||/^(\\d)\\1+$/.test(d))return false;const v=n=>{let s=0;for(let i=0;i<n;i++)s+=+d[i]*(n+1-i);return s*10%11%10==+d[n]};return v(9)&&v(10)};
@@ -639,14 +639,14 @@ function show(j){let q='';try{const x=qrcode(0,'M');x.addData(j.brcode);x.make()
 }
 
 function signupPage(g) {
-  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Criar conta – Norevia</title><link rel="icon" href="/assets/norevia-mark.svg">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(800px 500px at 80% -10%,rgba(255,107,91,.32),transparent 60%),#0A1430;color:#F3EDE1;font:15px/1.5 "Space Grotesk",system-ui,sans-serif}
-.c{width:min(420px,100%);background:#111E42;border:1px solid #273A68;border-radius:20px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:r .5s cubic-bezier(.2,.8,.2,1)}@keyframes r{from{transform:translateY(14px);opacity:0}}
-.lk{display:flex;align-items:center;gap:9px;margin-bottom:18px}.lk b{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:20px;letter-spacing:-.025em}h1{font-size:21px;margin:0}.m{color:#92A0C4;font-size:13.5px;margin:4px 0 16px}.g{display:inline-flex;gap:8px;align-items:center;background:#1A2A54;border-radius:20px;padding:4px 12px 4px 4px;font-size:13px;margin-bottom:14px}.g i{width:24px;height:24px;border-radius:50%;background:#FF6B5B;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:12px}
-input{width:100%;background:#1A2A54;border:1px solid #273A68;color:#F3EDE1;border-radius:10px;padding:11px 12px;font:inherit;margin-bottom:10px;outline:none}input:focus{border-color:#FF6B5B}
-button{width:100%;border:0;border-radius:10px;padding:13px;font:600 15px "Space Grotesk",sans-serif;background:#FF6B5B;color:#fff;cursor:pointer}.e{color:#E5484D;font-size:13px;min-height:1.2em;margin-top:6px}</style></head><body><div class="c">
-<div class="lk"><svg viewBox="0 0 48 48" width="30" height="30"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#F0563F"/></linearGradient></defs><rect width="48" height="48" rx="13" fill="url(#g)"/><path d="M13 34C19.5 34 21 20.5 33 15.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="13" cy="34" r="3.7" fill="#fff"/><path d="M27 15.5L34 14.6L33.4 21.6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Norevia</b></div>${g ? `<div class="g"><i>${escH(g.n[0])}</i>Convite de ${escH(g.n)}</div><h1>Crie sua conta de seller</h1><p class="m">Receba por Pix com o motor de pagamentos da Norevia.</p>
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Criar conta – Ryvo</title><link rel="icon" href="/assets/ryvo-mark.svg">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(800px 500px at 80% -10%,rgba(139,124,246,.32),transparent 60%),#0B0B14;color:#F4F2FF;font:15px/1.5 "Outfit","Space Grotesk",system-ui,sans-serif}
+.c{width:min(420px,100%);background:#12121F;border:1px solid #2A2A44;border-radius:20px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:r .5s cubic-bezier(.2,.8,.2,1)}@keyframes r{from{transform:translateY(14px);opacity:0}}
+.lk{display:flex;align-items:center;gap:9px;margin-bottom:18px}.lk b{font-family:"Outfit",sans-serif;font-weight:600;font-size:20px;letter-spacing:-.025em}h1{font-size:21px;margin:0}.m{color:#9C99B8;font-size:13.5px;margin:4px 0 16px}.g{display:inline-flex;gap:8px;align-items:center;background:#1A1A2C;border-radius:20px;padding:4px 12px 4px 4px;font-size:13px;margin-bottom:14px}.g i{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#7B7FF5,#C9A2F2);display:grid;place-items:center;font-style:normal;font-weight:700;font-size:12px}
+input{width:100%;background:#1A1A2C;border:1px solid #2A2A44;color:#F4F2FF;border-radius:10px;padding:11px 12px;font:inherit;margin-bottom:10px;outline:none}input:focus{border-color:#8B7CF6}
+button{width:100%;border:0;border-radius:10px;padding:13px;font:600 15px "Space Grotesk",sans-serif;background:linear-gradient(135deg,#7B7FF5,#C9A2F2);color:#fff;cursor:pointer}.e{color:#F2546B;font-size:13px;min-height:1.2em;margin-top:6px}</style></head><body><div class="c">
+<div class="lk"><svg viewBox="0 0 48 48" width="30" height="30"><defs><linearGradient id="g" x1="4" y1="40" x2="44" y2="8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7B7FF5"/><stop offset=".55" stop-color="#B8A6F4"/><stop offset="1" stop-color="#F4C6EE"/></linearGradient></defs><path d="M5 9h11l11 15-11 15H5l11-15z" fill="url(#g)"/><path d="M21 9h11l11 15-11 15H21l11-15z" fill="url(#g)"/></svg><b>Ryvo</b></div>${g ? `<div class="g"><i>${escH(g.n[0])}</i>Convite de ${escH(g.n)}</div><h1>Crie sua conta de seller</h1><p class="m">Receba por Pix com o motor de pagamentos da Ryvo.</p>
 <form id="f"><input name="n" placeholder="Nome da empresa ou seu nome" required minlength="3" maxlength="60"><input name="email" type="email" placeholder="E-mail" required autocomplete="email"><input name="pw" type="password" placeholder="Senha (mín. 8 caracteres)" required minlength="8" autocomplete="new-password"><button>Criar conta</button><div class="e" id="e"></div></form>` : '<h1>Link de convite inválido</h1><p class="m">Peça um novo link ao seu gerente.</p>'}
 </div><script>const f=document.getElementById('f');if(f)f.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));d.code='${g ? g.mgr.code : ''}';const r=await fetch('/api/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});const j=await r.json();if(!r.ok)return document.getElementById('e').textContent=j.error;location.href='/#home'}</script></body></html>`;
 }
@@ -743,6 +743,6 @@ http.createServer(async (req, res) => {
     send(res, st, { error: st === 500 ? 'Erro interno: ' + e.message : e.message });
   }
 }).listen(PORT, HOST, () => {
-  console.log(`Norevia rodando em ${PUBLIC_URL}`);
+  console.log(`Ryvo rodando em ${PUBLIC_URL}`);
   console.log(`Login do CEO: ${db.admin.email} (senha em data/ADMIN_LOGIN.txt ou config.json)`);
 });

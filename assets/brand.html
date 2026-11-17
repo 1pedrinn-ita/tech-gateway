@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ryvo Group — Identidade</title><link rel="icon" href="ryvo-mark.svg">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0B0B14;--ink2:#12121F;--line:#2A2A44;--paper:#FFFFFF;--tx:#F4F2FF;--mu:#9C99B8;--v1:#7B7FF5;--v2:#B8A6F4;--v3:#F4C6EE;--grad:linear-gradient(135deg,#7B7FF5 0%,#B8A6F4 55%,#F4C6EE 100%)}
+*{box-sizing:border-box}body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.5 "Outfit",system-ui,sans-serif;padding:40px 16px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:18px}
+h1{font-weight:600;font-size:28px;margin:0 0 4px;letter-spacing:-.02em}.sub{color:var(--mu);margin:0 0 10px}
+.grid{display:grid;grid-template-columns:1.65fr 1fr;gap:18px}
+.tile{border-radius:22px;border:1px solid var(--line);display:grid;place-items:center;min-height:250px;position:relative;overflow:hidden}
+.hero{min-height:420px;grid-column:1/-1;background:radial-gradient(700px 380px at 92% 0%,rgba(123,127,245,.55),transparent 60%),radial-gradient(500px 300px at 60% 110%,rgba(244,198,238,.18),transparent 60%),#05050A}
+.hero:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 210deg at 62% 50%,transparent 0 40%,rgba(184,166,244,.28) 46%,transparent 52%);filter:blur(30px)}
+.white{background:var(--paper)}.grad{background:var(--grad);border:0}.dark{background:var(--ink2)}
+.lock{display:flex;align-items:center;gap:18px;position:relative}
+.lock b{font-weight:600;letter-spacing:-.03em;line-height:1}
+.hero .lock b{font-size:104px}.hero svg{width:120px;height:120px}
+.white .lock b,.grad .lock b{font-size:60px}.white svg,.grad .lock svg{width:70px;height:70px}
+.white b{color:var(--ink)}.grad b,.hero b{color:#fff}
+.tile .solo{width:150px;height:150px}
+.group{display:block;font:500 13px "JetBrains Mono",monospace;letter-spacing:.35em;color:var(--mu);margin-top:8px;text-transform:uppercase}
+.white .group{color:#6B6886}.grad .group{color:rgba(255,255,255,.85)}
+.sw{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.c{border-radius:16px;border:1px solid var(--line);overflow:hidden}.c i{display:block;height:90px}.c div{padding:10px 12px;font-size:13px}.c small{display:block;color:var(--mu);font:12px "JetBrains Mono",monospace}
+.icons{display:flex;gap:18px;align-items:flex-end}.icons img{border-radius:22%;box-shadow:0 10px 30px rgba(123,127,245,.35)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.hero .lock b{font-size:56px}.hero svg{width:66px;height:66px}.white .lock b,.grad .lock b{font-size:40px}.white svg,.grad .lock svg{width:46px;height:46px}.sw{grid-template-columns:repeat(3,1fr)}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="g" x1="4" y1="40" x2="44" y2="8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7B7FF5"/><stop offset=".55" stop-color="#B8A6F4"/><stop offset="1" stop-color="#F4C6EE"/></linearGradient>
+<symbol id="m" viewBox="0 0 48 48"><path d="M5 9h11l11 15-11 15H5l11-15z"/><path d="M21 9h11l11 15-11 15H21l11-15z"/></symbol>
+</defs></svg>
+<div class="wrap">
+  <div><h1>Ryvo Group — identidade visual</h1><p class="sub">Marca: duas setas de cortes retos apontando para frente — o fluxo do pagamento. Gradiente violeta → lavanda → rosa sobre fundo quase preto.</p></div>
+  <div class="tile hero"><div class="lock"><svg fill="url(#g)"><use href="#m"/></svg><div><b>Ryvo</b><span class="group">group</span></div></div></div>
+  <div class="grid">
+    <div class="tile white"><div class="lock"><svg fill="url(#g)"><use href="#m"/></svg><div><b>Ryvo</b><span class="group">group</span></div></div></div>
+    <div class="tile grad"><svg class="solo" fill="#fff"><use href="#m"/></svg></div>
+    <div class="tile grad"><div class="lock"><svg fill="#fff"><use href="#m"/></svg><div><b>Ryvo</b><span class="group">group</span></div></div></div>
+    <div class="tile dark"><svg class="solo" fill="url(#g)"><use href="#m"/></svg></div>
+  </div>
+  <div><h1 style="font-size:20px">Paleta</h1><div class="sw">
+    <div class="c"><i style="background:#0B0B14"></i><div>Ink<small>#0B0B14</small></div></div>
+    <div class="c"><i style="background:#12121F"></i><div>Surface<small>#12121F</small></div></div>
+    <div class="c"><i style="background:#7B7FF5"></i><div>Violet<small>#7B7FF5</small></div></div>
+    <div class="c"><i style="background:#B8A6F4"></i><div>Lavender<small>#B8A6F4</small></div></div>
+    <div class="c"><i style="background:#F4C6EE"></i><div>Blush<small>#F4C6EE</small></div></div>
+    <div class="c"><i style="background:#F4F2FF"></i><div>Mist<small>#F4F2FF</small></div></div>
+  </div></div>
+  <div><h1 style="font-size:20px">Ícone do app (iOS / Android)</h1><div class="icons"><img src="ryvo-mark.svg" width="120" height="120" alt="Ícone Ryvo"><img src="ryvo-mark.svg" width="72" height="72" alt=""><img src="ryvo-mark.svg" width="44" height="44" alt=""></div></div>
+  <p class="sub">Tipografia: Outfit (títulos e texto) · JetBrains Mono (números e códigos).</p>
+</div></body></html>
